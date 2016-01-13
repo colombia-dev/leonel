@@ -1,4 +1,4 @@
-var Slack = require('slack-client')
+var Botkit = require('botkit')
 
 // Expect a SLACK_TOKEN environment variable
 var slackToken = process.env.SLACK_TOKEN
@@ -7,51 +7,62 @@ if (!slackToken) {
   process.exit(1)
 }
 
-// Create a new Slack client with our token
-var slack = new Slack(slackToken, true, true)
-
-// bot will be initialized when logged in
-var bot
-
-// handle loggedIn event
-slack.on('loggedIn', function (user, team) {
-  bot = user
-  console.log('I am ' + user.name + ' of team ' + team.name)
+var controller = Botkit.slackbot()
+var bot = controller.spawn({
+  token: slackToken
 })
 
-// show status when we conntect
-slack.on('open', function () {
-  console.log('Connected')
+bot.startRTM(function (err, bot, payload) {
+  if (err) {
+    throw new Error('Could not connect to Slack')
+  }
 })
 
-// register a handler for messages
-slack.on('message', function (message) {
-  if (isMe(message, bot.id)) return
-  if (!isMentioned(message, bot.id) && !isDM(message, bot.id)) return
-
-  console.log('Received message ' + message)
-
-  // We recieved a message that wasn't from us and either mentioned us or was a DM to us
-  // Let's ust say hi
-  var channel = slack.getChannelGroupOrDMByID(message.channel)
-  channel.send('Good day to you from https://beepboophq.com!')
+controller.on('bot_channel_join', function (bot, message) {
+  bot.reply(message, "I'm here!")
 })
 
-// initiate login
-slack.login()
+controller.hears(['hello', 'hi'], ['direct_mention'], function (bot, message) {
+  bot.reply(message, 'Hello.')
+})
 
-// ----------------------------------------------------------------------------
-// Utilities
-// ----------------------------------------------------------------------------
+controller.hears(['hello', 'hi'], ['direct_message'], function (bot, message) {
+  bot.reply(message, 'Hello.')
+  bot.reply(message, 'It\'s nice to talk to you directly.')
+})
 
-function isMentioned (message, userId) {
-  return message.text.indexOf('<@' + userId) >= 0
-}
+controller.hears('.*', ['mention'], function (bot, message) {
+  bot.reply(message, 'You really do care about me. :heart:')
+})
 
-function isMe (message, userId) {
-  return message.user === userId
-}
+controller.hears('help', ['direct_message', 'direct_mention'], function (bot, message) {
+  var help = 'I will respond to the following messages: \n' +
+      '`bot hi` for a simple message.\n' +
+      '`bot attachment` to see a Slack attachment message.\n' +
+      '`@<your bot\'s name>` to demonstrate detecting a mention.\n' +
+      '`bot help` to see this again.'
+  bot.reply(message, help)
+})
 
-function isDM (message, userId) {
-  return message.channel[0] === 'D'
-}
+controller.hears(['attachment'], ['direct_message', 'direct_mention'], function (bot, message) {
+  var text = 'Beep Beep Boop is a ridiculously simple hosting platform for your Slackbots.'
+  var attachments = [{
+    fallback: text,
+    pretext: 'We bring bots to life. :sunglasses: :thumbsup:',
+    title: 'Host, deploy and share your bot in seconds.',
+    image_url: 'https://storage.googleapis.com/beepboophq/_assets/bot-1.22f6fb.png',
+    title_link: 'https://beepboophq.com/',
+    text: text,
+    color: '#7CD197'
+  }]
+
+  bot.reply(message, {
+    attachments: attachments
+  }, function (err, resp) {
+    console.log(err, resp)
+  })
+})
+
+controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
+  bot.reply(message, 'Sorry <@' + message.user + '>, I don\'t understand. \n')
+})
