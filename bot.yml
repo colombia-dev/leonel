@@ -1,3 +1,17 @@
 name: nodebot
-description: A simple node.js bot
-avatar: avatar.png
+description: A simple node.js starter bot for Beep Boop
+avatar: resources/avatar.png
+#background: resources/background.png
+#config:
+#  - name: OPTION
+#    friendly_name: Some Unnecessary Option
+#    info: This is an unnecessary option
+#    default: the default value
+#  - name: SECRET
+#    friendly_name: Shhhh
+#    info: This is an secret option
+#    type: secret
+#    default: not secret though
+#screenshots:
+#  - screenshot: resources/screenshot1.png
+#  - screenshot: resources/screenshot2.jpg
