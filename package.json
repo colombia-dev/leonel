@@ -4,7 +4,8 @@
   "description": "A sample Beep Boop Node.js Slackbot",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,10 @@
   },
   "homepage": "https://github.com/beepboophq/node-slack-bot#readme",
   "dependencies": {
-    "botkit": "0.0.5"
+    "botkit": "0.0.5",
+    "botkit-storage-firebase": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "^0.14.0"
   }
 }
