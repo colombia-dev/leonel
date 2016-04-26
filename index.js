@@ -29,6 +29,8 @@ controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, "I'm here!");
 });
 
+controller.hears('invite a (.*)', ['direct_message'], invite);
+
 controller.hears('help', ['direct_message', 'direct_mention'], function (bot, message) {
   var help = 'I will respond to the following messages: \n' +
       '`bot hi` for a simple message.\n' +
