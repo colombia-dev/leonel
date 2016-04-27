@@ -76,7 +76,7 @@ test.cb('it replies to new invitation success', t => {
   });
 });
 
-test.cb.only('it logs invitation in hosts storage', t => {
+test.cb('it logs invitation in hosts storage', t => {
   let { bot, message, guest, email } = t.context;
   let { storage } = bot.botkit;
   t.plan(3);
@@ -96,7 +96,27 @@ test.cb.only('it logs invitation in hosts storage', t => {
 
 });
 
-test.todo('it creates storage if it doesn\'t exist yet');
+test.cb('it creates storage if it doesn\'t exist yet', t => {
+  let { bot, message, guest, email } = t.context;
+  let { storage } = bot.botkit;
+  let confirmation = 'Invitación esitosa!';
+  t.plan(2);
+  nock('https://colombia-dev.slack.com')
+    .post('/api/users.admin.invite')
+    .reply(200, { ok: true });
+
+  // override setup and pretend user has no data
+  storage.users.get.callsArgWith(1, null, null);
+
+  invite(bot, message, function () {
+    let newGuest = storage.users.save.args[0][0].guests[0];
+    let calledWith = bot.reply.calledWith(message, confirmation);
+
+    t.true(calledWith, 'bot replied');
+    t.is(newGuest, guest, `logged guest is ${email}`);
+    t.end(null);
+  });
+});
 
 test.todo('it replies with error on failure');
 
