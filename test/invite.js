@@ -8,7 +8,6 @@ import querystring from 'querystring';
 // setup good invitation test
 test.beforeEach(t => {
   let guest = 'buritica@gmail.com';
-  let userID = 'userID';
 
   // configure storage stubs
   let storage =  {
@@ -29,9 +28,7 @@ test.beforeEach(t => {
     },
     message: {
       match: [`invite a ${guest}`, `${guest}`],
-      user: {
-        id: userID,
-      },
+      user:  'user123',
     },
   };
 });
@@ -66,7 +63,6 @@ test.cb('it replies to new invitation success', t => {
   // make invitation request
   invite(bot, message, () => {
     let calledWith = bot.reply.calledWith(message, confirmation);
-
     t.true(calledWith, 'bot replied');
     t.end(null);
   });
@@ -84,11 +80,14 @@ test.cb('it logs invitation on user on new storage', t => {
 
   // make invitation request
   invite(bot, message, function () {
-    let newGuest = storage.users.save.args[0][0].guests[0];
-    let calledWith = bot.reply.calledWith(message, confirmation);
+    let saveCalledWith = storage.users.save.calledWith({
+      id: 'user123',
+      guests: ['buritica@gmail.com'],
+    });
+    let replyCalledWith = bot.reply.calledWith(message, confirmation);
 
-    t.true(calledWith, 'bot replied');
-    t.is(newGuest, guest, `logged guest is ${email}`);
+    t.true(replyCalledWith, 'bot replied');
+    t.true(saveCalledWith, `logged guest is ${email} on new storage`);
     t.end(null);
   });
 });
@@ -120,6 +119,8 @@ test.cb('it adds log to existing hosts storage', t => {
     t.end(null);
   });
 });
+
+test.todo('it logs result of invitation');
 
 test.todo('it replies with error on failure');
 
