@@ -10,7 +10,9 @@ test.beforeEach(t => {
   let guest = 'buritica@gmail.com';
   t.context = {
     guest,
-    bot: {},
+    bot: {
+      reply: sinon.spy(),
+    },
     message: {
       match: [`invite a ${guest}`, `${guest}`],
     },
@@ -26,13 +28,28 @@ test.cb('it sends new invitation', t => {
       t.is(email, t.context.guest, `email is ${email}`);
       t.is(token, process.env.SLACK_ADMIN_TOKEN, `token is ${token}`);
       cb(null, [200, { ok: true }]);
-      t.end(null);
     });
 
-  invite(t.context.bot, t.context.message);
+  invite(t.context.bot, t.context.message, t.end);
 });
 
-test.todo('it replies to new invitation success');
+test.cb('it replies to new invitation success', t => {
+  let confirmation = 'Invitación esitosa!';
+  t.plan(1);
+  nock('https://colombia-dev.slack.com')
+    .post('/api/users.admin.invite')
+    .reply(200, { ok: true });
+
+  invite(t.context.bot, t.context.message, () => {
+    let calledWith = t.context.bot.reply.calledWith(
+      t.context.message,
+      confirmation
+    );
+
+    t.true(calledWith, 'bot replied');
+    t.end();
+  });
+});
 
 test.todo('it logs invitation in users storage');
 
