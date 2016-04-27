@@ -11,20 +11,12 @@ test.beforeEach(t => {
   let userID = 'userID';
 
   // configure storage stubs
-  let hostData = {
-    id: userID,
-    guests: ['previous@gmail.com'],
-  };
-
   let storage =  {
     users: {
-      get: sinon.stub(),
-      save: sinon.stub(),
+      get: sinon.stub().callsArgWith(1, null, null),
+      save: sinon.stub().callsArg(1),
     },
   };
-
-  storage.users.get.callsArgWith(1, null, hostData);
-  storage.users.save.callsArg(1);
 
   // export context
   t.context = {
@@ -46,44 +38,78 @@ test.beforeEach(t => {
 
 test.cb('it sends new invitation', t => {
   t.plan(2);
+
+  let { bot, guest, message } = t.context;
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply((uri, body, cb) => {
       let { email, token } = querystring.parse(body);
-      t.is(email, t.context.guest, `email is ${email}`);
+
+      t.is(email, guest, `email is ${email}`);
       t.is(token, process.env.SLACK_ADMIN_TOKEN, `token is ${token}`);
       cb(null, [200, { ok: true }]);
     });
 
-  invite(t.context.bot, t.context.message, t.end);
+  // make invitation request
+  invite(bot, message, t.end);
 });
 
 test.cb('it replies to new invitation success', t => {
-  let confirmation = 'Invitación esitosa!';
   t.plan(1);
+
+  let { bot, guest, message } = t.context;
+  let confirmation = 'Invitación esitosa!';
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
 
-  invite(t.context.bot, t.context.message, () => {
-    let calledWith = t.context.bot.reply.calledWith(
-      t.context.message,
-      confirmation
-    );
+  // make invitation request
+  invite(bot, message, () => {
+    let calledWith = bot.reply.calledWith(message, confirmation);
 
     t.true(calledWith, 'bot replied');
     t.end(null);
   });
 });
 
-test.cb('it logs invitation in hosts storage', t => {
+test.cb('it logs invitation on user on new storage', t => {
+  t.plan(2);
+
   let { bot, message, guest, email } = t.context;
   let { storage } = bot.botkit;
-  t.plan(3);
+  let confirmation = 'Invitación esitosa!';
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
 
+  // make invitation request
+  invite(bot, message, function () {
+    let newGuest = storage.users.save.args[0][0].guests[0];
+    let calledWith = bot.reply.calledWith(message, confirmation);
+
+    t.true(calledWith, 'bot replied');
+    t.is(newGuest, guest, `logged guest is ${email}`);
+    t.end(null);
+  });
+});
+
+test.cb('it adds log to existing hosts storage', t => {
+  t.plan(3);
+
+  let { bot, guest, message, email } = t.context;
+  let { storage } = bot.botkit;
+  nock('https://colombia-dev.slack.com')
+    .post('/api/users.admin.invite')
+    .reply(200, { ok: true });
+
+  // setup storage
+  let hostData = {
+    id: 'userID',
+    guests: ['previous@gmail.com'],
+  };
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  // make invitation request
   invite(bot, message, function () {
     let getCalledWith = storage.users.get.calledWith(message.user);
     let [previousGuest, newGuest] = storage.users.save.args[0][0].guests;
@@ -91,29 +117,6 @@ test.cb('it logs invitation in hosts storage', t => {
     t.true(getCalledWith, 'finds host data');
     t.is(newGuest, guest, `logged guest is ${email}`);
     t.is(previousGuest, 'previous@gmail.com', `logged guest is ${previousGuest}`);
-    t.end(null);
-  });
-
-});
-
-test.cb('it creates storage if it doesn\'t exist yet', t => {
-  let { bot, message, guest, email } = t.context;
-  let { storage } = bot.botkit;
-  let confirmation = 'Invitación esitosa!';
-  t.plan(2);
-  nock('https://colombia-dev.slack.com')
-    .post('/api/users.admin.invite')
-    .reply(200, { ok: true });
-
-  // override setup and pretend user has no data
-  storage.users.get.callsArgWith(1, null, null);
-
-  invite(bot, message, function () {
-    let newGuest = storage.users.save.args[0][0].guests[0];
-    let calledWith = bot.reply.calledWith(message, confirmation);
-
-    t.true(calledWith, 'bot replied');
-    t.is(newGuest, guest, `logged guest is ${email}`);
     t.end(null);
   });
 });
