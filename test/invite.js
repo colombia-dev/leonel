@@ -157,5 +157,9 @@ test.cb('it replies with error message if something along flow errors', t => {
   });
 });
 
+test.todo('it replies and logs error message if user has already been invited');
+
+test.todo('it replies and logs error message if user has already joined team');
+
 test.todo('it only allows accounts older than 2 months to send invitations');
 
