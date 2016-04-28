@@ -124,3 +124,5 @@ test.todo('it logs result of invitation');
 
 test.todo('it replies with error on failure');
 
+test.todo('it only allows accounts older than 2 months to send invitations');
+
