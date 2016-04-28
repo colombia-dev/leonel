@@ -82,18 +82,18 @@ test.cb('it logs invitation on user on new storage', t => {
   invite(bot, message, function () {
     let saveCalledWith = storage.users.save.calledWith({
       id: 'user123',
-      guests: ['buritica@gmail.com'],
+      guests: [{ guest: 'buritica@gmail.com', result: 'ok' }],
     });
     let replyCalledWith = bot.reply.calledWith(message, confirmation);
 
-    t.true(replyCalledWith, 'bot replied');
     t.true(saveCalledWith, `logged guest is ${email} on new storage`);
+    t.true(replyCalledWith, 'bot replied');
     t.end(null);
   });
 });
 
 test.cb('it adds log to existing hosts storage', t => {
-  t.plan(3);
+  t.plan(4);
 
   let { bot, guest, message, email } = t.context;
   let { storage } = bot.botkit;
@@ -104,7 +104,7 @@ test.cb('it adds log to existing hosts storage', t => {
   // setup storage
   let hostData = {
     id: 'userID',
-    guests: ['previous@gmail.com'],
+    guests: [{ guest: 'previous@gmail.com', result: 'ok' }],
   };
   storage.users.get.callsArgWith(1, null, hostData);
 
@@ -114,13 +114,12 @@ test.cb('it adds log to existing hosts storage', t => {
     let [previousGuest, newGuest] = storage.users.save.args[0][0].guests;
 
     t.true(getCalledWith, 'finds host data');
-    t.is(newGuest, guest, `logged guest is ${email}`);
-    t.is(previousGuest, 'previous@gmail.com', `logged guest is ${previousGuest}`);
+    t.is(newGuest.guest, 'buritica@gmail.com', `logged guest is ${newGuest}`);
+    t.is(newGuest.result, 'ok', `logged result is ok`);
+    t.is(previousGuest, hostData.guests[0], `logged guest is ${previousGuest}`);
     t.end(null);
   });
 });
-
-test.todo('it logs result of invitation');
 
 test.todo('it replies with error on failure');
 
