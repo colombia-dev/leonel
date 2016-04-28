@@ -21,7 +21,7 @@ test.beforeEach(t => {
   t.context = {
     guest,
     bot: {
-      reply: sinon.spy(),
+      reply: sinon.stub().callsArg(2),
       botkit: {
         storage: storage,
       },
@@ -129,6 +129,26 @@ test.cb('it replies with error if response.status is not 200', t => {
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(500, { ok: false });
+
+  // make invitation request
+  invite(bot, message, () => {
+    t.true(bot.reply.calledWith(message, reply), 'bot replied');
+    t.end(null);
+  });
+});
+
+test.cb('it replies with error message if something along flow errors', t => {
+  t.plan(1);
+
+  let { bot, guest, message } = t.context;
+  let { storage } = bot.botkit;
+  let reply = 'Error - esa invitación no funcionó, échele una miradita al log';
+  nock('https://colombia-dev.slack.com')
+    .post('/api/users.admin.invite')
+    .reply(200, { ok: true });
+
+  // force database failure
+  storage.users.get.callsArgWith(1, new Error('fake db failure'), {});
 
   // make invitation request
   invite(bot, message, () => {
