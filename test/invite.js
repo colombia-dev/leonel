@@ -121,7 +121,7 @@ test.cb('it adds log to existing hosts storage', t => {
   });
 });
 
-test.cb.only('it replies with error if response.status is not 200', t => {
+test.cb('it replies with error if response.status is not 200', t => {
   t.plan(1);
 
   let { bot, guest, message } = t.context;
