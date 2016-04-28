@@ -1,0 +1,7 @@
+{
+  "quotmark": "single",
+  "unused": "vars",
+  "varstmt": true,
+  "node": true,
+  "esnext": true
+}

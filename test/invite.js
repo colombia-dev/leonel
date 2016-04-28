@@ -1,6 +1,6 @@
+'use strict';
 import test from 'ava';
 import invite from '../lib/invite';
-import _ from 'lodash';
 import sinon from 'sinon';
 import nock from 'nock';
 import querystring from 'querystring';
@@ -54,7 +54,7 @@ test.cb('it sends new invitation', t => {
 test.cb('it replies to new invitation success', t => {
   t.plan(1);
 
-  let { bot, guest, message } = t.context;
+  let { bot, message } = t.context;
   let reply = 'Invitación esitosa!';
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
@@ -71,7 +71,7 @@ test.cb('it replies to new invitation success', t => {
 test.cb('it logs invitation on user on new storage', t => {
   t.plan(2);
 
-  let { bot, message, guest, email } = t.context;
+  let { bot, message, guest } = t.context;
   let { storage } = bot.botkit;
   let reply = 'Invitación esitosa!';
   nock('https://colombia-dev.slack.com')
@@ -82,11 +82,11 @@ test.cb('it logs invitation on user on new storage', t => {
   invite(bot, message, function () {
     let saveCalledWith = storage.users.save.calledWith({
       id: 'user123',
-      guests: [{ guest: 'buritica@gmail.com', result: 'ok' }],
+      guests: [{ guest: guest, result: 'ok' }],
     });
     let replyCalledWith = bot.reply.calledWith(message, reply);
 
-    t.true(saveCalledWith, `logged guest is ${email} on new storage`);
+    t.true(saveCalledWith, `logged guest is ${guest} on new storage`);
     t.true(replyCalledWith, 'bot replied');
     t.end(null);
   });
@@ -95,7 +95,7 @@ test.cb('it logs invitation on user on new storage', t => {
 test.cb('it adds log to existing hosts storage', t => {
   t.plan(4);
 
-  let { bot, guest, message, email } = t.context;
+  let { bot, guest, message } = t.context;
   let { storage } = bot.botkit;
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
@@ -114,7 +114,7 @@ test.cb('it adds log to existing hosts storage', t => {
     let [previousGuest, newGuest] = storage.users.save.args[0][0].guests;
 
     t.true(getCalledWith, 'finds host data');
-    t.is(newGuest.guest, 'buritica@gmail.com', `logged guest is ${newGuest}`);
+    t.is(newGuest.guest, guest, `logged guest is ${newGuest}`);
     t.is(newGuest.result, 'ok', `logged result is ok`);
     t.is(previousGuest, hostData.guests[0], `logged guest is ${previousGuest}`);
     t.end(null);
@@ -124,7 +124,7 @@ test.cb('it adds log to existing hosts storage', t => {
 test.cb('it replies with error if response.status is not 200', t => {
   t.plan(1);
 
-  let { bot, guest, message } = t.context;
+  let { bot, message } = t.context;
   let reply = 'El servidor respondió de mala gana con estatus 500';
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
@@ -140,7 +140,7 @@ test.cb('it replies with error if response.status is not 200', t => {
 test.cb('it replies with error message if something along flow errors', t => {
   t.plan(1);
 
-  let { bot, guest, message } = t.context;
+  let { bot, message } = t.context;
   let { storage } = bot.botkit;
   let reply = 'Error - esa invitación no funcionó, échele una miradita al log';
   nock('https://colombia-dev.slack.com')
