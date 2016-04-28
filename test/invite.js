@@ -55,14 +55,14 @@ test.cb('it replies to new invitation success', t => {
   t.plan(1);
 
   let { bot, guest, message } = t.context;
-  let confirmation = 'Invitación esitosa!';
+  let reply = 'Invitación esitosa!';
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
 
   // make invitation request
   invite(bot, message, () => {
-    let calledWith = bot.reply.calledWith(message, confirmation);
+    let calledWith = bot.reply.calledWith(message, reply);
     t.true(calledWith, 'bot replied');
     t.end(null);
   });
@@ -73,7 +73,7 @@ test.cb('it logs invitation on user on new storage', t => {
 
   let { bot, message, guest, email } = t.context;
   let { storage } = bot.botkit;
-  let confirmation = 'Invitación esitosa!';
+  let reply = 'Invitación esitosa!';
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
@@ -84,7 +84,7 @@ test.cb('it logs invitation on user on new storage', t => {
       id: 'user123',
       guests: [{ guest: 'buritica@gmail.com', result: 'ok' }],
     });
-    let replyCalledWith = bot.reply.calledWith(message, confirmation);
+    let replyCalledWith = bot.reply.calledWith(message, reply);
 
     t.true(saveCalledWith, `logged guest is ${email} on new storage`);
     t.true(replyCalledWith, 'bot replied');
@@ -121,7 +121,21 @@ test.cb('it adds log to existing hosts storage', t => {
   });
 });
 
-test.todo('it replies with error on failure');
+test.cb.only('it replies with error if response.status is not 200', t => {
+  t.plan(1);
+
+  let { bot, guest, message } = t.context;
+  let reply = 'El servidor respondió de mala gana con estatus 500';
+  nock('https://colombia-dev.slack.com')
+    .post('/api/users.admin.invite')
+    .reply(500, { ok: false });
+
+  // make invitation request
+  invite(bot, message, () => {
+    t.true(bot.reply.calledWith(message, reply), 'bot replied');
+    t.end(null);
+  });
+});
 
 test.todo('it only allows accounts older than 2 months to send invitations');
 
