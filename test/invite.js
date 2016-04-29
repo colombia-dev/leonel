@@ -157,7 +157,34 @@ test.cb('it replies with error message if something along flow errors', t => {
   });
 });
 
-test.todo('it replies and logs error message if user has already been invited');
+test.cb('it replies and logs error message if user has already been invited', t => {
+  t.plan(3);
+
+  let { bot, message, guest } = t.context;
+  let { storage } = bot.botkit;
+  let reply = `Error - a ${guest} ya lo invitaron`;
+
+  // slack reponds with 200 and `ok:false` when things dont work ¯\_(ツ)_/¯
+  nock('https://colombia-dev.slack.com')
+    .post('/api/users.admin.invite')
+    .reply(200, { ok: false, error: 'already_invited' });
+
+  let hostData = {
+    id: 'userID',
+    guests: [{ guest: 'previous@gmail.com', result: 'ok' }],
+  };
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  // make invitation request
+  invite(bot, message, () => {
+    let newGuest = storage.users.save.args[0][0].guests[1];
+
+    t.true(bot.reply.calledWith(message, reply), 'bot replied');
+    t.is(newGuest.guest, guest, `logged guest is ${newGuest}`);
+    t.is(newGuest.result, 'already_invited', `logged result is already_invited`);
+    t.end(null);
+  });
+});
 
 test.todo('it replies and logs error message if user has already joined team');
 
