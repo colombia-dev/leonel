@@ -1,8 +1,6 @@
 var Botkit = require('botkit');
 var invite = require('./lib/invite');
-var firebaseStorage = require('botkit-storage-firebase')({
-  firebase_uri: process.env.FIREBASE_URI,
-});
+var storage = require('botkit-storage-mongo')({mongoUri: process.env.MONGO_URI});
 
 // Expect a SLACK_TOKEN environment variable
 var slackToken = process.env.SLACK_TOKEN;
@@ -12,7 +10,7 @@ if (!slackToken) {
 }
 
 var controller = Botkit.slackbot({
-  storage: firebaseStorage,
+  storage: storage,
 });
 
 var bot = controller.spawn({
