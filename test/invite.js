@@ -55,14 +55,17 @@ test.cb('it replies to new invitation success', t => {
   t.plan(1);
 
   let { bot, message } = t.context;
-  let reply = 'Invitación esitosa!';
+  let replyMessage = [
+    'Invitación esitosa!',
+    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria',
+  ].join('\n');
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
 
   // make invitation request
   invite(bot, message, () => {
-    let calledWith = bot.reply.calledWith(message, reply);
+    let calledWith = bot.reply.calledWith(message, replyMessage);
     t.true(calledWith, 'bot replied');
     t.end(null);
   });
@@ -73,7 +76,10 @@ test.cb('it logs invitation on user on new storage', t => {
 
   let { bot, message, guest } = t.context;
   let { storage } = bot.botkit;
-  let reply = 'Invitación esitosa!';
+  let replyMessage = [
+    'Invitación esitosa!',
+    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria',
+  ].join('\n');
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
@@ -84,7 +90,7 @@ test.cb('it logs invitation on user on new storage', t => {
       id: 'user123',
       guests: [{ guest: guest, result: 'ok' }],
     });
-    let replyCalledWith = bot.reply.calledWith(message, reply);
+    let replyCalledWith = bot.reply.calledWith(message, replyMessage);
 
     t.true(saveCalledWith, `logged guest is ${guest} on new storage`);
     t.true(replyCalledWith, 'bot replied');
