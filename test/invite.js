@@ -56,9 +56,9 @@ test.cb('it replies to new invitation success', t => {
 
   let { bot, message } = t.context;
   let replyMessage = [
-    'Invitación esitosa!',
-    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria',
-  ].join('\n');
+    '¡Invitación esitosa!',
+    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria :wink:.',
+  ].join(' ');
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
@@ -77,9 +77,9 @@ test.cb('it logs invitation on user on new storage', t => {
   let { bot, message, guest } = t.context;
   let { storage } = bot.botkit;
   let replyMessage = [
-    'Invitación esitosa!',
-    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria',
-  ].join('\n');
+    '¡Invitación esitosa!',
+    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria :wink:.',
+  ].join(' ');
   nock('https://colombia-dev.slack.com')
     .post('/api/users.admin.invite')
     .reply(200, { ok: true });
