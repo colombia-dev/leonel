@@ -1,3 +1,4 @@
+'use strict';
 let Botkit = require('botkit');
 let invite = require('./lib/invite');
 let storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
@@ -22,21 +23,28 @@ bot.startRTM(function (err, bot, payload) {
 });
 
 controller.on('bot_channel_join', function (bot, message) {
-  bot.reply(message, 'I\'m here!');
+  bot.reply(message, '¡Listo papito, si es ya, es ya!');
+});
+
+controller.hears(['coqueto'], ['direct_mention', 'direct_message'], function (bot, message) {
+  bot.reply(
+    message,
+    'Yo no soy coqueto... soy un tierno. https://www.youtube.com/watch?v=sFpdl0EiLkA'
+  );
 });
 
 controller.hears('invite a <mailto:(.*)\\|.*>', ['direct_message'], invite);
 
-controller.hears('help', ['direct_message', 'direct_mention'], function (bot, message) {
-  let help = 'I will respond to the following messages: \n' +
-      '`bot hi` for a simple message.\n' +
-      '`bot attachment` to see a Slack attachment message.\n' +
-      '`@<your bot\'s name>` to demonstrate detecting a mention.\n' +
-      '`bot help` to see this again.';
+controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], function (bot, message) {
+  let help = [
+    'Yo respondo a:',
+    '- `@leonel invite a me@example.com` para enviar una invitación a este Slack.',
+    '- `@leonel ayuda/help` para ver este mensaje.',
+  ].join('\n');
   bot.reply(message, help);
 });
 
 controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
-  bot.reply(message, 'Sorry <@' + message.user + '>, I don\'t understand. \n');
+  bot.reply(message, 'Paila <@' + message.user + '>, no entiendo que me pidió\n');
 });
 

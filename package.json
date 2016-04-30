@@ -1,27 +1,24 @@
 {
-  "name": "node-slack-bot",
+  "name": "leonel",
   "version": "1.0.0",
-  "description": "A sample Beep Boop Node.js Slackbot",
+  "description": "Director de inteligencia artificial en Colombia.dev",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "ava"
+    "test": "DEBUG=\"\" ava",
+    "watch": "ava --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/beepboophq/node-slack-bot.git"
   },
-  "keywords": [
-    "slackbot",
-    "bot",
-    "slack"
-  ],
-  "author": "",
+  "keywords": [],
+  "author": "Juan Pablo Buriticá <buritica@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/beepboophq/node-slack-bot/issues"
+    "url": "https://github.com/colombia-dev/leonel/issues"
   },
-  "homepage": "https://github.com/beepboophq/node-slack-bot#readme",
+  "homepage": "https://github.com/colombia-dev/leonel#readme",
   "dependencies": {
     "async": "^2.0.0-rc.3",
     "botkit": "0.0.5",
@@ -35,8 +32,6 @@
     "lodash": "^4.11.1",
     "nock": "^8.0.0",
     "sinon": "^1.17.3",
-    "superagent": "^1.8.3",
-    "superagent-as-promised": "^4.0.0",
-    "supertest-as-promised": "^3.1.0"
+    "superagent": "^1.8.3"
   }
 }
