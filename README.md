@@ -19,9 +19,6 @@ Things are looking good if the console prints something like:
 	docker build -t starter-node .`
 	docker run --rm -it -e SLACK_TOKEN=<YOUR SLACK API TOKEN> starter-node
 
-### Run in BeepBoop
-If you have linked your local repo with the Beep Boop service (check [here](https://beepboophq.com/0_o/my-projects)), changes pushed to the remote master branch will automatically deploy.
-
 ## Acknowledgements
 
 This code uses the [botkit](https://github.com/howdyai/botkit) npm module by the fine folks at Howdy.ai.
