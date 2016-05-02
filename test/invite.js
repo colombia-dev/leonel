@@ -127,6 +127,33 @@ test.cb('it adds log to existing hosts storage', t => {
   });
 });
 
+test.cb('it adds log to existing hosts storage with no guests', t => {
+  t.plan(3);
+
+  let { bot, guest, message } = t.context;
+  let { storage } = bot.botkit;
+  nock('https://colombia-dev.slack.com')
+    .post('/api/users.admin.invite')
+    .reply(200, { ok: true });
+
+  // setup storage
+  let hostData = {
+    id: 'userID',
+  };
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  // make invitation request
+  invite(bot, message, function () {
+    let getCalledWith = storage.users.get.calledWith(message.user);
+    let [newGuest] = storage.users.save.args[0][0].guests;
+
+    t.true(getCalledWith, 'finds host data');
+    t.is(newGuest.guest, guest, `logged guest is ${newGuest}`);
+    t.is(newGuest.result, 'ok', `logged result is ok`);
+    t.end(null);
+  });
+});
+
 test.cb('it replies with error if response.status is not 200', t => {
   t.plan(1);
 
