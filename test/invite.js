@@ -1,35 +1,32 @@
 'use strict';
+
+// require modules
 import test from 'ava';
 import invite from '../lib/invite';
-import sinon from 'sinon';
 import nock from 'nock';
 import querystring from 'querystring';
+
+// require test helpers
+import BotHelper from './helpers/bot';
+import StorageHelper from './helpers/storage';
+import MessageHelper from './helpers/message';
 
 // setup good invitation test
 test.beforeEach(t => {
   let guest = 'buritica@gmail.com';
 
-  // configure storage stubs
-  let storage =  {
-    users: {
-      get: sinon.stub().callsArgWith(1, null, null),
-      save: sinon.stub().callsArg(1),
-    },
-  };
+  // initialize helpers
+  let storage = new StorageHelper();
+  let bot = new BotHelper({ storage });
+  let message = new MessageHelper({
+    match: [`invite a ${guest}`, `${guest}`],
+  });
 
   // export context
   t.context = {
     guest,
-    bot: {
-      reply: sinon.stub().callsArg(2),
-      botkit: {
-        storage: storage,
-      },
-    },
-    message: {
-      match: [`invite a ${guest}`, `${guest}`],
-      user:  'user123',
-    },
+    bot,
+    message,
   };
 });
 
