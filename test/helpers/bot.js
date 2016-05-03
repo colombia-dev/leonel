@@ -9,8 +9,8 @@ function Bot(opts) {
   let storage = opts.storage || {};
 
   return {
-    reply: sinon.stub().callsArg(2),
-    say: sinon.stub().callsArg(1),
+    reply: sinon.stub().yields(),
+    say: sinon.stub().yields(),
     botkit: {
       storage,
     },
