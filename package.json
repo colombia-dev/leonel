@@ -24,6 +24,7 @@
     "botkit": "0.0.5",
     "botkit-storage-mongo": "^1.0.3",
     "debug": "^2.2.0",
+    "moment": "^2.13.0",
     "mongodb": "^1.4.40"
   },
   "devDependencies": {
