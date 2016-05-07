@@ -23,8 +23,9 @@ test.beforeEach(t => {
     user: 'userID',
     match: [`invite a ${guest}`, `${guest}`],
   });
-  let createdAt = moment().subtract(100, 'days');
 
+  // setup user stubbed data
+  let createdAt = moment().subtract(100, 'days');
   let hostData = {
     id: message.user,
     createdAt,
@@ -80,35 +81,7 @@ test.cb('it replies to new invitation success', t => {
   });
 });
 
-test.cb('it logs invitation on user on new storage', t => {
-  t.plan(2);
-
-  let { bot, message, guest, createdAt } = t.context;
-  let { storage } = bot.botkit;
-  let replyMessage = [
-    '¡Invitación esitosa!',
-    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria :wink:.',
-  ].join(' ');
-  nock('https://colombia-dev.slack.com')
-    .post('/api/users.admin.invite')
-    .reply(200, { ok: true });
-
-  // make invitation request
-  invite(bot, message, function () {
-    let saveCalledWith = storage.users.save.calledWith({
-      id: message.user,
-      guests: [{ guest: guest, result: 'ok' }],
-      createdAt,
-    });
-    let replyCalledWith = bot.reply.calledWith(message, replyMessage);
-
-    t.true(saveCalledWith, `logged guest is ${guest} on new storage`);
-    t.true(replyCalledWith, 'bot replied');
-    t.end(null);
-  });
-});
-
-test.cb('it adds log to existing hosts storage', t => {
+test.cb('it adds log to hosts storage with guests', t => {
   t.plan(4);
 
   let { bot, guest, message, createdAt } = t.context;
@@ -200,6 +173,24 @@ test.cb('it replies with error message if something along flow errors', t => {
   });
 });
 
+test.cb('it replies with error message if user has no data', t => {
+  t.plan(2);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+  let reply = 'Error - hubo un problema encontrando su cuenta';
+
+  // force database failure
+  storage.users.get.callsArgWith(1, null, null);
+
+  // make invitation request
+  invite(bot, message, () => {
+    t.is(bot.reply.args[0][0], message, 'called with message');
+    t.is(bot.reply.args[0][1], reply, 'called with text');
+    t.end(null);
+  });
+});
+
 test.cb('it replies and logs error message if user has already been invited', t => {
   t.plan(4);
 
@@ -266,11 +257,12 @@ test.cb('it restricts accounts older than 45 days from sending invitations', (t)
 
   let { bot, message } = t.context;
   let { storage } = bot.botkit;
-  let reply = `Error - debes esperar 44 días para poder invitar a otras personas`;
+  let reply = `Error - debes esperar 45 días para poder invitar a otras personas`;
+  let createdAt = moment();
 
   let hostData = {
     id: message.user,
-    createdAt: new Date(),
+    createdAt,
   };
   storage.users.get.callsArgWith(1, null, hostData);
 

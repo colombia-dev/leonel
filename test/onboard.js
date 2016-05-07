@@ -78,7 +78,6 @@ test.cb('it welcomes new user in private conversation', t => {
 
   // call onboarding
   onboard(bot, message, () => {
-    console.log('called', bot.conversation.say.args);
     t.true(bot.conversation.say.calledWith(welcomeText[0]), welcomeText[0]);
     t.true(bot.conversation.say.calledWith(welcomeText[1]), welcomeText[0]);
     t.end(null);
