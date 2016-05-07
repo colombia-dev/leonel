@@ -1,6 +1,7 @@
 'use strict';
 import test from 'ava';
 import onboard from '../lib/onboard';
+import sinon from 'sinon';
 
 // require test helpers
 import BotHelper from './helpers/bot';
@@ -29,7 +30,7 @@ test.beforeEach(t => {
 
 });
 
-test.cb('welcomes new user on #intros', t => {
+test.cb('it welcomes new user on #intros', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
@@ -38,7 +39,7 @@ test.cb('welcomes new user on #intros', t => {
     `Ole @${message.user.name}, que bueno tenerte por estas tierras.`,
     'Pa romper el hielo, cuéntanos... ¿Dónde vives y a qué te dedicas?',
   ].join(' ');
-  let introChannel = process.env.CHANNEL_INTROS; // todo: get right channel id for intros
+  let introChannel = process.env.CHANNEL_INTROS;
 
   // call onboarding
   onboard(bot, message, () => {
@@ -50,7 +51,7 @@ test.cb('welcomes new user on #intros', t => {
   });
 });
 
-test.cb('starts a private conversation for onboarding', t => {
+test.cb('it starts a private conversation for onboarding', t => {
   t.plan(1);
   let { bot, message } = t.context;
 
@@ -61,7 +62,7 @@ test.cb('starts a private conversation for onboarding', t => {
   });
 });
 
-test.cb('welcomes new user in private conversation', t => {
+test.cb('it welcomes new user in private conversation', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
@@ -84,6 +85,33 @@ test.cb('welcomes new user in private conversation', t => {
   });
 });
 
-test.todo('creates new user storage');
-test.todo('records date user joined');
+test.cb('it creates new user storage', t => {
+  t.plan(1);
 
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  onboard(bot, message, () => {
+    let savedID = storage.users.save.args[0][0].id;
+    t.is(savedID, message.user.id, `new user storage is created`);
+    t.end(null);
+  });
+});
+
+test.cb('it records date user joined', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+  let now = Date.now();
+  let clock = sinon.useFakeTimers(now);
+
+  // call onboarding
+  onboard(bot, message, () => {
+    let savedCreatedAt = storage.users.save.args[0][0].createdAt;
+    t.is(savedCreatedAt.getTime(), new Date().getTime(), 'records date user joined');
+    clock.restore();
+    t.end(null);
+  });
+});
