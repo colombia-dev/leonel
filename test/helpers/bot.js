@@ -20,9 +20,18 @@ function Bot(opts) {
 
   debug('init', opts);
   let storage = opts.storage || {};
+  let conversation = { say: sinon.spy() };
+
+  function startPrivateConversation(opts, cb) {
+    debug('startPrivateConversation', opts);
+    cb(null, conversation);
+  }
+
   let bot = {
     reply,
     say,
+    startPrivateConversation,
+    conversation,
     botkit: {
       storage,
     },
@@ -30,6 +39,7 @@ function Bot(opts) {
 
   sinon.spy(bot, 'reply');
   sinon.spy(bot, 'say');
+  sinon.spy(bot, 'startPrivateConversation');
 
   return bot;
 }

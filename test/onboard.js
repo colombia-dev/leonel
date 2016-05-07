@@ -19,26 +19,71 @@ test.beforeEach(t => {
     bot,
     message,
   };
+
+  // message.user has a different structure in the `team_joined` event we bind to
+  // so we extend it here before tests run
+  message.user = {
+    id: 'user123',
+    name: 'buritica',
+  };
+
 });
 
-test.cb('welcomes new user on #general', t => {
+test.cb('welcomes new user on #intros', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
-  let welcomeText = 'ola ke ase, bienvenid@ a colombia.dev';
-  let welcomeChannel = '#general';
 
-  // make invitation request
+  let introText = [
+    `Ole @${message.user.name}, que bueno tenerte por estas tierras.`,
+    'Pa romper el hielo, cuéntanos... ¿Dónde vives y a qué te dedicas?',
+  ].join(' ');
+  let introChannel = process.env.CHANNEL_INTROS; // todo: get right channel id for intros
+
+  // call onboarding
   onboard(bot, message, () => {
     let sayArgs = bot.say.args[0][0];
 
-    t.is(sayArgs.text, welcomeText, 'welcomes user');
-    t.is(sayArgs.channel, welcomeChannel, 'uses right channel');
+    t.is(sayArgs.text, introText, 'welcomes user');
+    t.is(sayArgs.channel, introChannel, 'uses right channel');
     t.end(null);
   });
 });
 
-test.todo('welcomes new user privately');
+test.cb('starts a private conversation for onboarding', t => {
+  t.plan(1);
+  let { bot, message } = t.context;
+
+  onboard(bot, message, () => {
+    let user = bot.startPrivateConversation.args[0][0].user;
+    t.is(user, message.user.id, 'private conversation started');
+    t.end(null);
+  });
+});
+
+test.cb('welcomes new user in private conversation', t => {
+  t.plan(2);
+
+  let { bot, message } = t.context;
+  let welcomeText = [
+    '¡Hola! Ya que acabas de llegar por aquí te cuento unas cositas sobre colombia.dev: \n' +
+    '• Somos una comunidad de personas intersadas en programación y diseño ' +
+    'nacidas o residentes en :flag-co: \n' +
+    '• Hay diferentes canales organizados por tema, únete a los que te interesen. \n' +
+    '• #trabajos es el único lugar donde se permiten ofertas o busquedas laborales \n',
+    'Finalmente, al pertenecer a esta comunidad adoptas nuestro código de conducta' +
+    'https://github.com/colombia-dev/codigo-de-conducta/blob/master/README.md',
+  ];
+
+  // call onboarding
+  onboard(bot, message, () => {
+    console.log('called', bot.conversation.say.args);
+    t.true(bot.conversation.say.calledWith(welcomeText[0]), welcomeText[0]);
+    t.true(bot.conversation.say.calledWith(welcomeText[1]), welcomeText[0]);
+    t.end(null);
+  });
+});
+
 test.todo('creates new user storage');
 test.todo('records date user joined');
 
