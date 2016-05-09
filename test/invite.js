@@ -51,7 +51,6 @@ test('it sends new invitation', t => {
 
   let { slack, bot, guest, message } = t.context;
   slack.reply((uri, body, cb) => {
-    console.log('what the f');
     let { email, token } = querystring.parse(body);
 
     t.is(email, guest, `email is ${email}`);
@@ -60,9 +59,7 @@ test('it sends new invitation', t => {
   });
 
   // make invitation request
-  return invite(bot, message).then(() => {
-    console.log('what');
-  });
+  return invite(bot, message);
 });
 
 test('it replies to new invitation success', t => {
