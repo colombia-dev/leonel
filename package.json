@@ -21,11 +21,13 @@
   "homepage": "https://github.com/colombia-dev/leonel#readme",
   "dependencies": {
     "async": "^2.0.0-rc.3",
+    "bluebird": "^3.3.5",
     "botkit": "0.0.5",
     "botkit-storage-mongo": "^1.0.3",
     "debug": "^2.2.0",
     "moment": "^2.13.0",
-    "mongodb": "^1.4.40"
+    "mongodb": "^1.4.40",
+    "superagent-bluebird-promise": "^3.0.0"
   },
   "devDependencies": {
     "ava": "^0.14.0",

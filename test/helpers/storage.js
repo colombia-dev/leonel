@@ -7,13 +7,14 @@ function Storage(opts) {
 
   debug('init', opts);
 
-  return {
+  let storage = {
     users: {
-      // get data is empty by default
-      get: sinon.stub().callsArgWith(1, null, null),
-      save: sinon.stub().callsArg(1),
+      get: sinon.stub().yields(),
+      save: sinon.stub().yields(),
     },
   };
+
+  return storage;
 }
 
 module.exports = Storage;

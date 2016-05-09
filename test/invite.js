@@ -6,13 +6,13 @@ import invite from '../lib/invite';
 import nock from 'nock';
 import querystring from 'querystring';
 import moment from 'moment';
+import sinon from 'sinon';
 
 // require test helpers
 import BotHelper from './helpers/bot';
 import StorageHelper from './helpers/storage';
 import MessageHelper from './helpers/message';
 
-// setup good invitation test
 test.beforeEach(t => {
   let guest = 'buritica@gmail.com';
 
@@ -46,11 +46,12 @@ test.beforeEach(t => {
 
 test.afterEach(nock.cleanAll);
 
-test.cb('it sends new invitation', t => {
+test('it sends new invitation', t => {
   t.plan(2);
 
   let { slack, bot, guest, message } = t.context;
   slack.reply((uri, body, cb) => {
+    console.log('what the f');
     let { email, token } = querystring.parse(body);
 
     t.is(email, guest, `email is ${email}`);
@@ -59,10 +60,12 @@ test.cb('it sends new invitation', t => {
   });
 
   // make invitation request
-  invite(bot, message, t.end);
+  return invite(bot, message).then(() => {
+    console.log('what');
+  });
 });
 
-test.cb('it replies to new invitation success', t => {
+test('it replies to new invitation success', t => {
   t.plan(1);
 
   let { slack, bot, message } = t.context;
@@ -73,14 +76,58 @@ test.cb('it replies to new invitation success', t => {
   slack.reply(200, { ok: true });
 
   // make invitation request
-  invite(bot, message, () => {
+  return invite(bot, message).then(() => {
     let calledWith = bot.reply.calledWith(message, replyMessage);
     t.true(calledWith, 'bot replied');
-    t.end(null);
   });
 });
 
-test.cb('it adds log to hosts storage with guests', t => {
+test('it restricts accounts older than 45 days from sending invitations', (t) => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+  let clock = sinon.useFakeTimers(moment.now());
+  let reply = `Error - debes esperar 45 días para poder invitar a otras personas`;
+
+  let hostData = {
+    id: message.user,
+    createdAt: new Date(),
+  };
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  // make invitation request
+  return invite(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied');
+    clock.restore();
+  });
+});
+
+test('it allows accounts older than 45 days to send invitations', (t) => {
+  t.plan(1);
+
+  let { slack, bot, message, createdAt } = t.context;
+  let { storage } = bot.botkit;
+  let reply = [
+    '¡Invitación esitosa!',
+    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria :wink:.',
+  ].join(' ');
+
+  slack.reply(200, { ok: true });
+
+  let hostData = {
+    id: message.user,
+    createdAt,
+  };
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  // make invitation request
+  return invite(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied');
+  });
+});
+
+test('it adds log to hosts storage with guests', t => {
   t.plan(4);
 
   let { slack, bot, guest, message, createdAt } = t.context;
@@ -96,7 +143,7 @@ test.cb('it adds log to hosts storage with guests', t => {
   storage.users.get.callsArgWith(1, null, hostData);
 
   // make invitation request
-  invite(bot, message, function () {
+  return invite(bot, message).then(() => {
     let getCalledWith = storage.users.get.calledWith(message.user);
     let [previousGuest, newGuest] = storage.users.save.args[0][0].guests;
 
@@ -104,11 +151,10 @@ test.cb('it adds log to hosts storage with guests', t => {
     t.is(newGuest.guest, guest, `logged guest is ${newGuest}`);
     t.is(newGuest.result, 'ok', `logged result is ok`);
     t.is(previousGuest, hostData.guests[0], `logged guest is ${previousGuest}`);
-    t.end(null);
   });
 });
 
-test.cb('it adds log to existing hosts storage with no guests', t => {
+test('it adds log to existing hosts storage with no guests', t => {
   t.plan(3);
 
   let { slack, bot, guest, message, createdAt } = t.context;
@@ -123,18 +169,17 @@ test.cb('it adds log to existing hosts storage with no guests', t => {
   storage.users.get.callsArgWith(1, null, hostData);
 
   // make invitation request
-  invite(bot, message, function () {
+  return invite(bot, message).then(() => {
     let getCalledWith = storage.users.get.calledWith(message.user);
     let [newGuest] = storage.users.save.args[0][0].guests;
 
     t.true(getCalledWith, 'finds host data');
     t.is(newGuest.guest, guest, `logged guest is ${newGuest}`);
     t.is(newGuest.result, 'ok', `logged result is ok`);
-    t.end(null);
   });
 });
 
-test.cb('it replies with error if response.status is not 200', t => {
+test('it replies with error if response.status is not 200', t => {
   t.plan(1);
 
   let { slack, bot, message } = t.context;
@@ -142,31 +187,12 @@ test.cb('it replies with error if response.status is not 200', t => {
   slack.reply(500, { ok: false });
 
   // make invitation request
-  invite(bot, message, () => {
+  return invite(bot, message).then(() => {
     t.true(bot.reply.calledWith(message, reply), 'bot replied');
-    t.end(null);
   });
 });
 
-test.cb('it replies with error message if something along flow errors', t => {
-  t.plan(2);
-
-  let { bot, message } = t.context;
-  let { storage } = bot.botkit;
-  let reply = 'Error - esa invitación no funcionó, échele una miradita al log';
-
-  // force database failure
-  storage.users.get.callsArgWith(1, new Error('fake db failure'), {});
-
-  // make invitation request
-  invite(bot, message, () => {
-    t.is(bot.reply.args[0][0], message, 'called with message');
-    t.is(bot.reply.args[0][1], reply, 'called with text');
-    t.end(null);
-  });
-});
-
-test.cb('it replies with error message if user has no data', t => {
+test('it replies with error message if user has no data', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
@@ -177,14 +203,13 @@ test.cb('it replies with error message if user has no data', t => {
   storage.users.get.callsArgWith(1, null, null);
 
   // make invitation request
-  invite(bot, message, () => {
+  return invite(bot, message).then(() => {
     t.is(bot.reply.args[0][0], message, 'called with message');
     t.is(bot.reply.args[0][1], reply, 'called with text');
-    t.end(null);
   });
 });
 
-test.cb('it replies and logs error message if user has already been invited', t => {
+test('it replies and logs error message if user has already been invited', t => {
   t.plan(4);
 
   let { slack, bot, message, guest, createdAt } = t.context;
@@ -202,18 +227,17 @@ test.cb('it replies and logs error message if user has already been invited', t 
   storage.users.get.callsArgWith(1, null, hostData);
 
   // make invitation request
-  invite(bot, message, () => {
+  return invite(bot, message).then(() => {
     let newGuest = storage.users.save.args[0][0].guests[1];
 
     t.is(bot.reply.args[0][0], message, 'called with message');
     t.is(bot.reply.args[0][1], reply, 'called with text');
     t.is(newGuest.guest, guest, `logged guest is ${newGuest}`);
     t.is(newGuest.result, 'already_invited', `logged result is already_invited`);
-    t.end(null);
   });
 });
 
-test.cb('it replies and logs error message if user has already joined team', t=> {
+test('it replies and logs error message if user has already joined team', t=> {
   t.plan(3);
 
   let { slack, bot, message, guest, createdAt } = t.context;
@@ -231,59 +255,28 @@ test.cb('it replies and logs error message if user has already joined team', t=>
   storage.users.get.callsArgWith(1, null, hostData);
 
   // make invitation request
-  invite(bot, message, () => {
+  return invite(bot, message).then(() => {
     let newGuest = storage.users.save.args[0][0].guests[1];
 
     t.true(bot.reply.calledWith(message, reply), 'bot replied');
     t.is(newGuest.guest, guest, `logged guest is ${newGuest}`);
     t.is(newGuest.result, 'already_in_team', `logged result is already_in_team`);
-    t.end(null);
   });
 });
 
-test.cb('it restricts accounts older than 45 days from sending invitations', (t) => {
-  t.plan(1);
+test('it replies with error message if something along flow errors', t => {
+  t.plan(2);
 
   let { bot, message } = t.context;
   let { storage } = bot.botkit;
-  let reply = `Error - debes esperar 45 días para poder invitar a otras personas`;
-  let createdAt = moment();
+  let reply = 'Error - esa invitación no funcionó, échele una miradita al log';
 
-  let hostData = {
-    id: message.user,
-    createdAt,
-  };
-  storage.users.get.callsArgWith(1, null, hostData);
+  // force database failure
+  storage.users.get.callsArgWith(1, new Error('fake db failure'), {});
 
   // make invitation request
-  invite(bot, message, () => {
-    t.is(bot.reply.args[0][1], reply, 'bot replied');
-    t.end(null);
+  return invite(bot, message).then(() => {
+    t.is(bot.reply.args[0][0], message, 'called with message');
+    t.is(bot.reply.args[0][1], reply, 'called with text');
   });
 });
-
-test.cb('it allows accounts older than 45 days to send invitations', (t) => {
-  t.plan(1);
-
-  let { slack, bot, message } = t.context;
-  let { storage } = bot.botkit;
-  let reply = [
-    '¡Invitación esitosa!',
-    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria :wink:.',
-  ].join(' ');
-
-  slack.reply(200, { ok: true });
-
-  let hostData = {
-    id: message.user,
-    createdAt: moment().subtract(100, 'days'),
-  };
-  storage.users.get.callsArgWith(1, null, hostData);
-
-  // make invitation request
-  invite(bot, message, () => {
-    t.is(bot.reply.args[0][1], reply, 'bot replied');
-    t.end(null);
-  });
-});
-
