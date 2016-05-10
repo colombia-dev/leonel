@@ -1,16 +1,22 @@
 name: leonel
 description: Director de inteligencia artificial en colombia-dev
 avatar: resources/avatar.png
-#background: resources/background.png
-#config:
-#  - name: OPTION
-#    friendly_name: Some Unnecessary Option
-#    info: This is an unnecessary option
-#    default: the default value
-#  - name: SECRET
-#    friendly_name: Shhhh
-#    info: This is an secret option
-#    type: secret
+config:
+ - name: CHANNEL_INTROS
+   friendly_name: Channel for introductions
+   info: Channel id where introductions will be made
+ - name: DEBUG
+   friendly_name: Debug
+   info: String to pass to debug library for selective logging
+   default: bot:*
+ - name: SLACK_ADMIN_TOKEN
+   friendly_name: Slack Admin Token
+   info: Used to authorize invitations
+   type: secret
+ - name: MONGO_URI
+   friendly_name: Mongo URI
+   info: MongoDB connection URL
+   type: secret
 #    default: not secret though
 #screenshots:
 #  - screenshot: resources/screenshot1.png
