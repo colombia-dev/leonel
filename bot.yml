@@ -1,19 +1,36 @@
-name: leonel
-description: Director de inteligencia artificial en colombia-dev
-avatar: resources/avatar.png
+name:  Domination Bot
+description: A Bot to rule them all
+avatar: avatar.jpg
 config:
-  - name: CHANNEL_INTROS
-    friendly_name: Channel for introductions
-    info: Channel id where introductions will be made
-  - name: DEBUG
-    friendly_name: Debug
-    info: String to pass to debug library for selective logging
-    default: bot:*
-  - name: SLACK_ADMIN_TOKEN
-    friendly_name: Slack Admin Token
-    info: Used to authorize invitations
-    type: secret
-  - name: MONGO_URI
-    friendly_name: Mongo URI
-    info: MongoDB connection URL
-    type: secret
+- name: AWS_REGION
+  friendly_name: AWS Region
+  info: Region of deployment (e.g. us-eas-1)
+  default: us-east-1
+  type: text
+- name: AWS_ACCESS_KEY
+  friendly_name: AWS Access Key
+  info: Amazon Web Services access key
+  type: secret
+- name: AWS_SECRET_KEY
+  friendly_name: AWS Secret Key
+  info: Amazon Web Services secret key
+  type: secret
+# name: leonel
+# description: Director de inteligencia artificial en colombia-dev
+# avatar: resources/avatar.png
+# config:
+#   - name: CHANNEL_INTROS
+#     friendly_name: Channel for introductions
+#     info: Channel id where introductions will be made
+#   - name: DEBUG
+#     friendly_name: Debug
+#     info: String to pass to debug library for selective logging
+#     default: bot:*
+#   - name: SLACK_ADMIN_TOKEN
+#     friendly_name: Slack Admin Token
+#     info: Used to authorize invitations
+#     type: secret
+#   - name: MONGO_URI
+#     friendly_name: Mongo URI
+#     info: MongoDB connection URL
+#     type: secret
