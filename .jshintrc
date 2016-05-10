@@ -3,5 +3,8 @@
   "unused": "vars",
   "varstmt": true,
   "node": true,
-  "esnext": true
+  "esnext": true,
+  "predef": [
+    "-Promise"
+  ]
 }

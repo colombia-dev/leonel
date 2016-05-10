@@ -1,6 +1,7 @@
 'use strict';
 let Botkit = require('botkit');
 let invite = require('./lib/invite');
+let onboard = require('./lib/onboard');
 let storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
 
 // Expect a SLACK_TOKEN environment variable
@@ -24,6 +25,13 @@ bot.startRTM(function (err, bot, payload) {
 
 controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, '¡Listo papito, si es ya, es ya!');
+});
+
+controller.on('user_change', onboard);
+
+controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
+  console.log('message', JSON.stringify(message, null, 2));
+  bot.reply(message, 'testing');
 });
 
 controller.hears(['coqueto'], ['direct_mention', 'direct_message'], function (bot, message) {

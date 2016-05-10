@@ -30,7 +30,7 @@ test.beforeEach(t => {
 
 });
 
-test.cb('it welcomes new user on #intros', t => {
+test('it welcomes new user on #intros', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
@@ -42,27 +42,25 @@ test.cb('it welcomes new user on #intros', t => {
   let introChannel = process.env.CHANNEL_INTROS;
 
   // call onboarding
-  onboard(bot, message, () => {
+  return onboard(bot, message).then(() => {
     let sayArgs = bot.say.args[0][0];
 
     t.is(sayArgs.text, introText, 'welcomes user');
     t.is(sayArgs.channel, introChannel, 'uses right channel');
-    t.end(null);
   });
 });
 
-test.cb('it starts a private conversation for onboarding', t => {
+test('it starts a private conversation for onboarding', t => {
   t.plan(1);
   let { bot, message } = t.context;
 
-  onboard(bot, message, () => {
+  return onboard(bot, message).then(() => {
     let user = bot.startPrivateConversation.args[0][0].user;
     t.is(user, message.user.id, 'private conversation started');
-    t.end(null);
   });
 });
 
-test.cb('it welcomes new user in private conversation', t => {
+test('it welcomes new user in private conversation', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
@@ -77,28 +75,26 @@ test.cb('it welcomes new user in private conversation', t => {
   ];
 
   // call onboarding
-  onboard(bot, message, () => {
+  return onboard(bot, message).then(() => {
     t.true(bot.conversation.say.calledWith(welcomeText[0]), welcomeText[0]);
     t.true(bot.conversation.say.calledWith(welcomeText[1]), welcomeText[0]);
-    t.end(null);
   });
 });
 
-test.cb('it creates new user storage', t => {
+test('it creates new user storage', t => {
   t.plan(1);
 
   let { bot, message } = t.context;
   let { storage } = bot.botkit;
 
   // call onboarding
-  onboard(bot, message, () => {
+  return onboard(bot, message).then(() => {
     let savedID = storage.users.save.args[0][0].id;
     t.is(savedID, message.user.id, `new user storage is created`);
-    t.end(null);
   });
 });
 
-test.cb('it records date user joined', t => {
+test('it records date user joined', t => {
   t.plan(1);
 
   let { bot, message } = t.context;
@@ -107,10 +103,9 @@ test.cb('it records date user joined', t => {
   let clock = sinon.useFakeTimers(now);
 
   // call onboarding
-  onboard(bot, message, () => {
+  return onboard(bot, message).then(() => {
     let savedCreatedAt = storage.users.save.args[0][0].createdAt;
     t.is(savedCreatedAt.getTime(), new Date().getTime(), 'records date user joined');
     clock.restore();
-    t.end(null);
   });
 });
