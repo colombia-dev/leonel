@@ -66,7 +66,7 @@ test('it welcomes new user in private conversation', t => {
   let { bot, message } = t.context;
   let welcomeText = [
     '¡Hola! Ya que acabas de llegar por aquí te cuento unas cositas sobre colombia.dev: \n' +
-    '• Somos una comunidad de personas intersadas en programación y diseño ' +
+    '• Somos una comunidad de personas interasadas en programación y diseño ' +
     'nacidas o residentes en :flag-co: \n' +
     '• Hay diferentes canales organizados por tema, únete a los que te interesen. \n' +
     '• #trabajos es el único lugar donde se permiten ofertas o busquedas laborales \n',
