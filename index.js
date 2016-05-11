@@ -27,7 +27,7 @@ controller.on('bot_channel_join', function (bot, message) {
   bot.reply(message, '¡Listo papito, si es ya, es ya!');
 });
 
-controller.on('user_change', onboard);
+controller.on('team_join', onboard);
 
 controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
   console.log('message', JSON.stringify(message, null, 2));
@@ -41,7 +41,7 @@ controller.hears(['coqueto'], ['direct_mention', 'direct_message'], function (bo
   );
 });
 
-controller.hears('invite a <mailto:(.*)\\|.*>', ['direct_message'], invite);
+controller.hears('invite a <mailto:(.*)\\|.*>', ['direct_message', 'direct_mention'], invite);
 
 controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], function (bot, message) {
   let help = [
