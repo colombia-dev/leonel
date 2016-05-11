@@ -3,6 +3,7 @@ let Botkit = require('botkit');
 let invite = require('./lib/invite');
 let onboard = require('./lib/onboard');
 let storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
+let debug = require('debug')('bot:main');
 
 // Expect a SLACK_TOKEN environment variable
 let slackToken = process.env.SLACK_TOKEN;
@@ -53,6 +54,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], functi
 });
 
 controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
+  debug('not caught', JSON.stringify(message, null, 2));
   bot.reply(message, 'Paila <@' + message.user + '>, no entiendo que me pidió\n');
 });
 
