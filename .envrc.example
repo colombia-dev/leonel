@@ -1,0 +1,5 @@
+export SLACK_TOKEN="XXX"
+export SLACK_ADMIN_TOKEN="XXXX" # required for invites, must be an admin
+export DEBUG="bot:*,helper:*" # to configure https://github.com/visionmedia/debug for log filters
+export MONGO_URI="mongodb://blablabla" # this bot uses mongodb storage
+export CHANNEL_INTROS="C17RU3N87" # used for onboarding invites

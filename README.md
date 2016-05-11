@@ -1,23 +1,22 @@
 # Leonel
 
 ## Overview
-Leonel is a bot we use to make our life easier for our colombia-dev community
+Leonel is a bot we use to make our life easier for our [colombia-dev](http://colombia-dev.org) community
 
 ## Usage
 
 ### Run locally
+
+note, to run locally you must expose all the environment variables set in the [example env file](.envrc.example)
+
 	npm install
-	SLACK_TOKEN=<YOUR_SLACK_TOKEN> npm start
+	npm start
 
 Things are looking good if the console prints something like:
 
     ** API CALL: https://slack.com/api/rtm.start
-    ** BOT ID:  witty  ...attempting to connect to RTM!
+    ** BOT ID:  leonel  ...attempting to connect to RTM!
     ** API CALL: https://slack.com/api/chat.postMessage
-
-### Run locally in Docker
-	docker build -t starter-node .`
-	docker run --rm -it -e SLACK_TOKEN=<YOUR SLACK API TOKEN> starter-node
 
 ## Acknowledgements
 
