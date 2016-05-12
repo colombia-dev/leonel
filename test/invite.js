@@ -41,6 +41,7 @@ test.beforeEach(t => {
     bot,
     message,
     createdAt,
+    hostData
   };
 });
 
@@ -275,5 +276,23 @@ test('it replies with error message if something along flow errors', t => {
   return invite(bot, message).then(() => {
     t.is(bot.reply.args[0][0], message, 'called with message');
     t.is(bot.reply.args[0][1], reply, 'called with text');
+  });
+});
+
+test.only('it restricts accounts with 0 invites left from sending invitations', (t) => {
+  t.plan(1);
+
+  let { bot, message, hostData } = t.context;
+  let { storage } = bot.botkit;
+  let clock = sinon.useFakeTimers(moment.now());
+  let reply = `Error - has agotado tus invitaciones mensuales, intenta de nuevo el 1ro del proximo mes`;
+
+  hostData.invites = 0;
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  // make invitation request
+  return invite(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied');
+    clock.restore();
   });
 });
