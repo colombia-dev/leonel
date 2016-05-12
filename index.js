@@ -20,40 +20,62 @@ let bot = controller.spawn({
   token: slackToken,
 });
 
-bot.startRTM(function (err, bot, payload) {
+bot.startRTM((err, bot, payload) => {
   if (err) { throw new Error('Could not connect to Slack'); }
 });
 
-controller.on('bot_channel_join', function (bot, message) {
+controller.on('bot_channel_join', (bot, message) => {
   bot.reply(message, '¡Listo papito, si es ya, es ya!');
 });
 
-controller.on('team_join', onboard);
-
-controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
-  console.log('message', JSON.stringify(message, null, 2));
-  bot.reply(message, 'testing');
-});
-
-controller.hears(['coqueto'], ['direct_mention', 'direct_message'], function (bot, message) {
+/**
+ * Coqueto ;)
+ */
+controller.hears(['coqueto'], ['direct_mention', 'direct_message'], (bot, message) => {
   bot.reply(
     message,
     'Yo no soy coqueto... soy un tierno. https://www.youtube.com/watch?v=sFpdl0EiLkA'
   );
 });
 
-controller.hears('invite a <mailto:(.*)\\|.*>', ['direct_message', 'direct_mention'], invite);
+/**
+ * Invitations
+ */
+controller.hears('invite a <mailto:(.*)\\|.*>', 'direct_message', invite);
 
-controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], function (bot, message) {
+controller.hears('invite', 'direct_mention', (bot, message) => {
+  bot.reply(message, 'Invitaciones por DM por favor :soccer:');
+});
+
+/**
+ * Private Onboarding
+ */
+controller.on('team_join', onboard);
+
+/**
+ * Help
+ */
+controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, message) => {
   let help = [
     'Yo respondo a:',
-    '- `@leonel invite a me@example.com` para enviar una invitación a este Slack.',
+    '- `DM - invite a me@example.com` para enviar una invitación a este Slack.',
     '- `@leonel ayuda/help` para ver este mensaje.',
   ].join('\n');
   bot.reply(message, help);
 });
 
-controller.hears('.*', ['direct_message', 'direct_mention'], function (bot, message) {
+/**
+ * Channel Debugging
+ */
+controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
+  debug('message', JSON.stringify(message, null, 2));
+  bot.reply(message, 'testing');
+});
+
+/**
+ * Uncaught Messages
+ */
+controller.hears('.*', ['direct_message', 'direct_mention'], (bot, message) => {
   debug('not caught', JSON.stringify(message, null, 2));
   bot.reply(message, 'Paila <@' + message.user + '>, no entiendo que me pidió\n');
 });
