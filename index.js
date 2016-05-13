@@ -5,6 +5,7 @@ const invite = require('./lib/invite');
 const onboard = require('./lib/onboard');
 const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
 const debug = require('debug')('bot:main');
+const repoLink = 'https://github.com/buritica/leonel';
 
 // Expect a SLACK_TOKEN environment variable
 let slackToken = process.env.SLACK_TOKEN;
@@ -61,6 +62,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
     'Yo respondo a:',
     '- `DM - invite a me@example.com` para enviar una invitación a este Slack.',
     '- `@leonel ayuda/help` para ver este mensaje.',
+    `... y me podes estender en ${repoLink}`,
   ].join('\n');
   bot.reply(message, help);
 });
