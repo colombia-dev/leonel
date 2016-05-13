@@ -11,8 +11,8 @@ function Storage(opts) {
   let storage = {
     users: {
       get: sinon.stub().yields(),
-      save: sinon.stub().yields()
-    }
+      save: sinon.stub().yields(),
+    },
   };
 
   return storage;

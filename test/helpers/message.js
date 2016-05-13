@@ -12,7 +12,7 @@ function Message(opts) {
 
   return {
     match,
-    user
+    user,
   };
 }
 
