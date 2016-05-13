@@ -1,17 +1,17 @@
 'use strict';
 
-// require modules
-import test from 'ava';
-import invite from '../lib/invite';
-import nock from 'nock';
-import querystring from 'querystring';
-import moment from 'moment';
-import sinon from 'sinon';
+// = require modules
+const test = require('ava');
+const invite = require('../lib/invite');
+const nock = require('nock');
+const querystring = require('querystring');
+const moment = require('moment');
+const sinon = require('sinon');
 
-// require test helpers
-import BotHelper from './helpers/bot';
-import StorageHelper from './helpers/storage';
-import MessageHelper from './helpers/message';
+// = require test helpers
+const BotHelper = require('./helpers/bot');
+const StorageHelper = require('./helpers/storage');
+const MessageHelper = require('./helpers/message');
 
 test.beforeEach(t => {
   let guest = 'buritica@gmail.com';

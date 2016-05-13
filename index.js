@@ -1,9 +1,10 @@
 'use strict';
-let Botkit = require('botkit');
-let invite = require('./lib/invite');
-let onboard = require('./lib/onboard');
-let storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
-let debug = require('debug')('bot:main');
+
+const Botkit = require('botkit');
+const invite = require('./lib/invite');
+const onboard = require('./lib/onboard');
+const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
+const debug = require('debug')('bot:main');
 
 // Expect a SLACK_TOKEN environment variable
 let slackToken = process.env.SLACK_TOKEN;
