@@ -1,9 +1,10 @@
 'use strict';
 
-let Promise = require('bluebird');
-let moment = require('moment');
-let Botkit = require('botkit');
-let storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
+const Promise = require('bluebird');
+const moment = require('moment');
+const Botkit = require('botkit');
+const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
+
 let updates = [];
 
 // Expect a SLACK_TOKEN environment variable

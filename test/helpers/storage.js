@@ -1,6 +1,7 @@
 'use strict';
-let sinon = require('sinon');
-let debug = require('debug')('helper:storage');
+
+const sinon = require('sinon');
+const debug = require('debug')('helper:storage');
 
 function Storage(opts) {
   opts = opts || {};

@@ -1,6 +1,8 @@
 'use strict';
-let sinon = require('sinon');
-let debug = require('debug')('helper:bot');
+
+const sinon = require('sinon');
+const debug = require('debug')('helper:bot');
+
 let noop = () => {};
 
 function say(opts, cb) {
@@ -19,6 +21,7 @@ function Bot(opts) {
   opts = opts || {};
 
   debug('init', opts);
+
   let storage = opts.storage || {};
   let conversation = { say: sinon.spy() };
 
