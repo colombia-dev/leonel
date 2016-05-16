@@ -51,6 +51,9 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
 
 /**
  * Private Onboarding
+ * for testing you can subscribe to `user_change` and modify your own profile
+ * so an event with the same info fires, since we don't have a way to simulate
+ * slack events easily right now
  */
 controller.on('team_join', onboard);
 
