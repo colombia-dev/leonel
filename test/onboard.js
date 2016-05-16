@@ -64,7 +64,7 @@ test('it starts a private conversation for onboarding', t => {
 });
 
 test('it welcomes new user in private conversation', t => {
-  t.plan(2);
+  t.plan(3);
 
   let { bot, message } = t.context;
   let jobsChannel = process.env.CHANNEL_JOBS;
@@ -74,14 +74,16 @@ test('it welcomes new user in private conversation', t => {
     'nacidas o residentes en :flag-co: \n' +
     '• Hay diferentes canales organizados por tema, únete a los que te interesen. \n' +
     `• <#${jobsChannel}|trabajos> es el único lugar donde se permiten ofertas o búsquedas laborales \n`,
-    'Finalmente, al pertenecer a esta comunidad adoptas nuestro código de conducta' +
+    'Finalmente, al pertenecer a esta comunidad adoptas nuestro código de conducta ' +
     'https://github.com/colombia-dev/codigo-de-conducta/blob/master/README.md',
+    'Síguenos en twitter en https://twitter.com/colombia_dev',
   ];
 
   // call onboarding
   return onboard(bot, message).then(() => {
-    t.true(bot.conversation.say.calledWith(welcomeText[0]), welcomeText[0]);
-    t.true(bot.conversation.say.calledWith(welcomeText[1]), welcomeText[0]);
+    t.true(bot.conversation.say.calledWith(welcomeText[0]));
+    t.true(bot.conversation.say.calledWith(welcomeText[1]));
+    t.true(bot.conversation.say.calledWith(welcomeText[2]));
   });
 });
 

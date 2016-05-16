@@ -65,7 +65,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
     'Yo respondo a:',
     '- `/dm @leonel invite a me@example.com` para enviar una invitación a este Slack.',
     '- `@leonel ayuda/help` para ver este mensaje.',
-    `... y me podes estender en ${config.homepage}`,
+    `... y me podés estender en ${config.homepage}`,
   ].join('\n');
   bot.reply(message, help);
 });
