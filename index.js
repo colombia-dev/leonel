@@ -52,7 +52,7 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
 /**
  * Private Onboarding
  */
-controller.on('team_join', onboard);
+controller.on('team_join', () => setTimeout(onboard, 5000));
 
 /**
  * Help
@@ -60,7 +60,7 @@ controller.on('team_join', onboard);
 controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, message) => {
   let help = [
     'Yo respondo a:',
-    '- `DM - invite a me@example.com` para enviar una invitación a este Slack.',
+    '- `/dm @leonel invite a me@example.com` para enviar una invitación a este Slack.',
     '- `@leonel ayuda/help` para ver este mensaje.',
     `... y me podes estender en ${config.homepage}`,
   ].join('\n');
