@@ -31,23 +31,25 @@ test.beforeEach(t => {
 
 });
 
-test('it welcomes new user on #intros', t => {
+test.serial('it welcomes new user on #intros', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
-
   let introText = [
-    `Ole @${message.user.name}, que bueno tenerte por estas tierras.`,
+    `Ole <@${message.user.id}|message.user.name>, que bueno tenerte por estas tierras.`,
     'Pa romper el hielo, cuéntanos... ¿Dónde vives y a qué te dedicas?',
   ].join(' ');
   let introChannel = process.env.CHANNEL_INTROS;
+  let clock = sinon.useFakeTimers();
 
   // call onboarding
   return onboard(bot, message).then(() => {
+    clock.tick(3000);
     let sayArgs = bot.say.args[0][0];
 
     t.is(sayArgs.text, introText, 'welcomes user');
     t.is(sayArgs.channel, introChannel, 'uses right channel');
+    clock.restore();
   });
 });
 
@@ -62,23 +64,26 @@ test('it starts a private conversation for onboarding', t => {
 });
 
 test('it welcomes new user in private conversation', t => {
-  t.plan(2);
+  t.plan(3);
 
   let { bot, message } = t.context;
+  let jobsChannel = process.env.CHANNEL_JOBS;
   let welcomeText = [
     '¡Hola! Ya que acabas de llegar por aquí te cuento unas cositas sobre colombia.dev: \n' +
     '• Somos una comunidad de personas interesadas en programación y diseño ' +
     'nacidas o residentes en :flag-co: \n' +
     '• Hay diferentes canales organizados por tema, únete a los que te interesen. \n' +
-    '• #trabajos es el único lugar donde se permiten ofertas o búsquedas laborales \n',
-    'Finalmente, al pertenecer a esta comunidad adoptas nuestro código de conducta' +
+    `• <#${jobsChannel}|trabajos> es el único lugar donde se permiten ofertas o búsquedas laborales \n`,
+    'Finalmente, al pertenecer a esta comunidad adoptas nuestro código de conducta ' +
     'https://github.com/colombia-dev/codigo-de-conducta/blob/master/README.md',
+    'Síguenos en twitter en https://twitter.com/colombia_dev',
   ];
 
   // call onboarding
   return onboard(bot, message).then(() => {
-    t.true(bot.conversation.say.calledWith(welcomeText[0]), welcomeText[0]);
-    t.true(bot.conversation.say.calledWith(welcomeText[1]), welcomeText[0]);
+    t.true(bot.conversation.say.calledWith(welcomeText[0]));
+    t.true(bot.conversation.say.calledWith(welcomeText[1]));
+    t.true(bot.conversation.say.calledWith(welcomeText[2]));
   });
 });
 
@@ -108,5 +113,29 @@ test('it records date user joined', t => {
     let savedCreatedAt = storage.users.save.args[0][0].createdAt;
     t.is(savedCreatedAt.getTime(), new Date().getTime(), 'records date user joined');
     clock.restore();
+  });
+});
+
+test('it records user name', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].name, 'buritica', 'records user name');
+  });
+});
+
+test('it assigns 3 invites', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].invites, 3, 'records user name');
   });
 });

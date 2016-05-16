@@ -51,6 +51,9 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
 
 /**
  * Private Onboarding
+ * for testing you can subscribe to `user_change` and modify your own profile
+ * so an event with the same info fires, since we don't have a way to simulate
+ * slack events easily right now
  */
 controller.on('team_join', onboard);
 
@@ -62,7 +65,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
     'Yo respondo a:',
     '- `/dm @leonel invite a me@example.com` para enviar una invitación a este Slack.',
     '- `@leonel ayuda/help` para ver este mensaje.',
-    `... y me podes estender en ${config.homepage}`,
+    `... y me podés estender en ${config.homepage}`,
   ].join('\n');
   bot.reply(message, help);
 });
