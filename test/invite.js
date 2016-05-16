@@ -30,6 +30,7 @@ test.beforeEach(t => {
   let createdAt = moment().subtract(100, 'days');
   let hostData = {
     id: message.user,
+    invites: 3,
     createdAt,
   };
   storage.users.get.callsArgWith(1, null, hostData);
@@ -41,7 +42,7 @@ test.beforeEach(t => {
     bot,
     message,
     createdAt,
-    hostData
+    hostData,
   };
 });
 
@@ -67,10 +68,7 @@ test('it replies to new invitation success', t => {
   t.plan(1);
 
   let { slack, bot, message } = t.context;
-  let replyMessage = [
-    '¡Invitación esitosa!',
-    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria :wink:.',
-  ].join(' ');
+  let replyMessage = '¡Invitación esitosa!';
   slack.reply(200, { ok: true });
 
   // make invitation request
@@ -106,10 +104,7 @@ test('it allows accounts older than 45 days to send invitations', (t) => {
 
   let { slack, bot, message, createdAt } = t.context;
   let { storage } = bot.botkit;
-  let reply = [
-    '¡Invitación esitosa!',
-    'Le cuento que ud es responsable por sus invitados y yo tengo buena memoria :wink:.',
-  ].join(' ');
+  let reply = '¡Invitación esitosa!';
 
   slack.reply(200, { ok: true });
 
@@ -279,13 +274,12 @@ test('it replies with error message if something along flow errors', t => {
   });
 });
 
-test.only('it restricts accounts with 0 invites left from sending invitations', (t) => {
+test('it restricts accounts with 0 invites left from sending invitations', (t) => {
   t.plan(1);
 
   let { bot, message, hostData } = t.context;
   let { storage } = bot.botkit;
-  let clock = sinon.useFakeTimers(moment.now());
-  let reply = `Error - has agotado tus invitaciones mensuales, intenta de nuevo el 1ro del proximo mes`;
+  let reply = `Error - has agotado tus invitaciones mensuales, intenta de nuevo el 1ro del mes`;
 
   hostData.invites = 0;
   storage.users.get.callsArgWith(1, null, hostData);
@@ -293,6 +287,47 @@ test.only('it restricts accounts with 0 invites left from sending invitations', 
   // make invitation request
   return invite(bot, message).then(() => {
     t.is(bot.reply.args[0][1], reply, 'bot replied');
-    clock.restore();
+  });
+});
+
+test('it allows accounts with invites to send invitations', t => {
+  t.plan(1);
+
+  let { slack, bot, message } = t.context;
+  let replyMessage = '¡Invitación esitosa!';
+  slack.reply(200, { ok: true });
+
+  // make invitation request
+  return invite(bot, message).then(() => {
+    let calledWith = bot.reply.calledWith(message, replyMessage);
+    t.true(calledWith, 'bot replied');
+  });
+});
+
+test('it updates the amount of invitations left after one is used', t => {
+  t.plan(1);
+
+  let { slack, bot, message } = t.context;
+  let { storage } = bot.botkit;
+  slack.reply(200, { ok: true });
+
+  // make invitation request
+  return invite(bot, message).then(() => {
+    let invites = storage.users.save.args[0][0].invites;
+    t.is(invites, 2, 'invites are subtracted');
+  });
+});
+
+test('it doesn\' update the amount of invitations left if there was an error', t => {
+  t.plan(1);
+
+  let { slack, bot, message } = t.context;
+  let { storage } = bot.botkit;
+  slack.reply(200, { ok: false, error: 'already_invited' });
+
+  // make invitation request
+  return invite(bot, message).then(() => {
+    let invites = storage.users.save.args[0][0].invites;
+    t.is(invites, 3, 'invites are subtracted');
   });
 });
