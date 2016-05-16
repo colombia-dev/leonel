@@ -318,7 +318,7 @@ test('it updates the amount of invitations left after one is used', t => {
   });
 });
 
-test('it doesn\' update the amount of invitations left if there was an error', t => {
+test('it doesn\'t update the amount of invitations left if there was an error', t => {
   t.plan(1);
 
   let { slack, bot, message } = t.context;
