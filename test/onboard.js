@@ -110,3 +110,27 @@ test('it records date user joined', t => {
     clock.restore();
   });
 });
+
+test('it records user name', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].name, 'buritica', 'records user name');
+  });
+});
+
+test('it assigns 3 invites', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].invites, 3, 'records user name');
+  });
+});
