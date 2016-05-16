@@ -1,7 +1,6 @@
 'use strict';
 
 const Promise = require('bluebird');
-const moment = require('moment');
 const Botkit = require('botkit');
 const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
 
@@ -17,22 +16,34 @@ if (!token) {
 let controller = Botkit.slackbot({ storage });
 let bot = controller.spawn({ token });
 let userSave = Promise.promisify(bot.botkit.storage.users.save);
+let userGet = Promise.promisify(bot.botkit.storage.users.get);
 
 bot.api.users.list({}, (err, res) => {
+  if (err) { throw err; }
+
   res.members.forEach(member => {
-    console.log('%s', member.name);
-    let user = {
-      id: member.id,
-      name: member.name,
-      guests: [],
-      createdAt: moment().subtract(46, 'days').toDate(),
-    };
 
-    updates.push(userSave(user));
-  });
+    userGet(member.id).then((user) => {
+      console.log('%s', member.name);
+      let updatedUser = {
+        id: member.id,
+        name: member.name,
+        real_name: member.profile.real_name_normalized,
+        email: member.profile.email,
+        guests: user.guests || [],
+        invites: 3,
+        is_owner: member.is_owner,
+        is_admin: member.is_admin,
+        is_bot: member.is_bot,
+        createdAt: user.createdAt || Date.now(),
+      };
 
-  Promise.all(updates).then(() => {
-    console.log('%s users updated', updates.length);
-    process.exit(0);
+      updates.push(userSave(updatedUser));
+    });
   });
+  setTimeout(()=> {
+    Promise.all(updates).then(() => {
+      console.log('%s users updated', updates.length);
+    });
+  }, 5000);
 });
