@@ -1,5 +1,5 @@
 # Leonel
-[![Circle CI](https://circleci.com/gh/buritica/leonel.svg?style=svg)](https://circleci.com/gh/buritica/leonel)
+[![Circle CI](https://circleci.com/gh/colombia-dev/leonel.svg?style=svg)](https://circleci.com/gh/buritica/leonel)
 
 ## Overview
 Leonel is a bot we use to make our life easier for our [colombia-dev](http://colombia-dev.org) community

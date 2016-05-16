@@ -80,6 +80,5 @@ controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) =>
  */
 controller.hears('.*', ['direct_message', 'direct_mention'], (bot, message) => {
   debug('not caught', JSON.stringify(message, null, 2));
-  bot.reply(message, 'Paila <@' + message.user + '>, no entiendo que me pidió\n');
 });
 
