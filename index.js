@@ -52,7 +52,7 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
 /**
  * Private Onboarding
  */
-controller.on('team_join', () => setTimeout(onboard, 5000));
+controller.on('team_join', onboard);
 
 /**
  * Help
