@@ -31,23 +31,25 @@ test.beforeEach(t => {
 
 });
 
-test('it welcomes new user on #intros', t => {
+test.serial('it welcomes new user on #intros', t => {
   t.plan(2);
 
   let { bot, message } = t.context;
-
   let introText = [
     `Ole @${message.user.name}, que bueno tenerte por estas tierras.`,
     'Pa romper el hielo, cuéntanos... ¿Dónde vives y a qué te dedicas?',
   ].join(' ');
   let introChannel = process.env.CHANNEL_INTROS;
+  let clock = sinon.useFakeTimers();
 
   // call onboarding
   return onboard(bot, message).then(() => {
+    clock.tick(3000);
     let sayArgs = bot.say.args[0][0];
 
     t.is(sayArgs.text, introText, 'welcomes user');
     t.is(sayArgs.channel, introChannel, 'uses right channel');
+    clock.restore();
   });
 });
 
