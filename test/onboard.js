@@ -27,6 +27,13 @@ test.beforeEach(t => {
   message.user = {
     id: 'user123',
     name: 'buritica',
+    profile: {
+      real_name_normalized: 'My Name Normalized',
+      email: 'buritica@gmail.com',
+    },
+    is_bot: false,
+    is_admin: true,
+    is_owner: true,
   };
 
 });
@@ -124,7 +131,57 @@ test('it records user name', t => {
 
   // call onboarding
   return onboard(bot, message).then(() => {
-    t.is(storage.users.save.args[0][0].name, 'buritica', 'records user name');
+    t.is(storage.users.save.args[0][0].name, message.user.name, 'records user name');
+  });
+});
+
+test('it records user real name', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].real_name, message.user.profile.real_name_normalized, 'records real user name');
+  });
+});
+
+test('it records user email', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].email, message.user.profile.email, 'records user email');
+  });
+});
+
+test('it records slack user state', t => {
+  t.plan(3);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].is_admin, message.user.is_admin, 'records is admin');
+    t.is(storage.users.save.args[0][0].is_owner, message.user.is_owner, 'records is owner');
+    t.is(storage.users.save.args[0][0].is_bot, message.user.is_bot, 'records is bot');
+  });
+});
+
+test('it records empty guests', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+
+  // call onboarding
+  return onboard(bot, message).then(() => {
+    t.is(storage.users.save.args[0][0].guests.length, 0, 'records empty guests');
   });
 });
 
