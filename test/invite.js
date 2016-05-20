@@ -23,7 +23,8 @@ test.beforeEach(t => {
     user: 'userID',
     match: [`invite a ${guest}`, `${guest}`],
   });
-  let slack = nock('https://colombia-dev.slack.com')
+  let teamName = process.env.SLACK_TEAM_NAME || 'colombia-dev';
+  let slack = nock(`https://${teamName}.slack.com`)
     .post('/api/users.admin.invite');
 
   // setup user stubbed data
