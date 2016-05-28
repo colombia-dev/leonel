@@ -1,14 +1,18 @@
 'use strict';
 
+const config = require('./lib/config');
+const checkConfig = require('./lib/check-config');
+checkConfig(config, ['SLACK_TOKEN', 'SLACK_ADMIN_TOKEN', 'SLACK_TEAM_NAME', 'DEBUG', 'MONGO_URI', 'CHANNEL_INTROS']);
+
 const Botkit = require('botkit');
 const invite = require('./lib/invite');
 const onboard = require('./lib/onboard');
-const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
+const storage = require('botkit-storage-mongo')({ mongoUri: config.MONGO_URI });
 const debug = require('debug')('bot:main');
-const config = require('./package.json');
+const packageInfo = require('./package.json');
 
 // Expect a SLACK_TOKEN environment variable
-let slackToken = process.env.SLACK_TOKEN;
+let slackToken = config.SLACK_TOKEN;
 if (!slackToken) {
   console.error('SLACK_TOKEN is required!');
   process.exit(1);
@@ -65,7 +69,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
     'Yo respondo a:',
     '- `/dm @leonel invite a me@example.com` para enviar una invitación a este Slack.',
     '- `@leonel ayuda/help` para ver este mensaje.',
-    `... y me podés estender en ${config.homepage}`,
+    `... y me podés estender en ${packageInfo.homepage}`,
   ].join('\n');
   bot.reply(message, help);
 });
@@ -84,4 +88,3 @@ controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) =>
 controller.hears('.*', ['direct_message', 'direct_mention'], (bot, message) => {
   debug('not caught', JSON.stringify(message, null, 2));
 });
-
