@@ -3,7 +3,6 @@
 // = require modules
 const test = require('ava');
 const checkConfig = require('../lib/check-config');
-const sinon = require('sinon');
 
 test('throws an error if there are missing config variables', t => {
 
