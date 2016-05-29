@@ -15,6 +15,10 @@
   },
   "keywords": [],
   "author": "Juan Pablo Buriticá <buritica@gmail.com>",
+  "contributors": [{
+    "name": "Simon Soriano",
+    "email": "simon0191@gmail.com"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/colombia-dev/leonel/issues"
