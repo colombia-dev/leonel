@@ -30,12 +30,12 @@ bot.api.users.list({}, (err, res) => {
         name: member.name,
         real_name: member.profile.real_name_normalized,
         email: member.profile.email,
-        guests: user.guests || [],
+        guests: (user && user.guests) || [],
         invites: 3,
         is_owner: member.is_owner,
         is_admin: member.is_admin,
         is_bot: member.is_bot,
-        createdAt: user.createdAt || Date.now(),
+        createdAt: (user && user.createdAt) || Date.now(),
       };
 
       updates.push(userSave(updatedUser));
