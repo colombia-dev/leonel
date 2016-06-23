@@ -40,7 +40,7 @@ controller.on('bot_channel_join', (bot, message) => {
 controller.hears(['coqueto'], ['direct_mention', 'direct_message'], (bot, message) => {
   bot.reply(
     message,
-    'Yo no soy coqueto... soy un tierno. https://www.youtube.com/watch?v=sFpdl0EiLkA'
+    'Yo no soy coqueto... soy un tierno. https://www.youtube.com/watch?v=sFpdl0EiLkA&feature=youtu.be&t=223'
   );
 });
 
