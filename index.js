@@ -75,6 +75,19 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
 });
 
 /**
+ * Baires Dev explanation
+ */
+controller.hears(['Baires', 'BairesDev', 'baires', 'bairesdev'], ['direct_message', 'direct_mention'], (bot, message) => {
+  let bairesResponse = [
+    'Existen opiniones generales acerca de la empresa, dentro de las cuales se incluyen:',
+    '- Spam generado con multiples ofertas laborales a las cuales rara vez dan respuesta.',
+    '- Pocas personas han estado trabajando con ellos.',
+    '- Algunas personas han iniciado proceso de selección pero tardan mucho las respuestas.',
+  ].join('\n');
+  bot.reply(message, bairesResponse);
+});
+
+/**
  * Channel Debugging
  */
 controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
