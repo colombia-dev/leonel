@@ -69,7 +69,7 @@ test('it replies to new invitation success', t => {
   t.plan(1);
 
   let { slack, bot, message } = t.context;
-  let replyMessage = '¡Invitación esitosa!';
+  let replyMessage = '¡Invitación etsitosa!';
   slack.reply(200, { ok: true });
 
   // make invitation request
