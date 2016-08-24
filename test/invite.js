@@ -105,7 +105,7 @@ test('it allows accounts older than 45 days to send invitations', (t) => {
 
   let { slack, bot, message, createdAt } = t.context;
   let { storage } = bot.botkit;
-  let reply = '¡Invitación esitosa!';
+  let reply = '¡Invitación etsitosa!';
 
   slack.reply(200, { ok: true });
 
