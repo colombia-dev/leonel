@@ -295,7 +295,7 @@ test('it allows accounts with invites to send invitations', t => {
   t.plan(1);
 
   let { slack, bot, message } = t.context;
-  let replyMessage = '¡Invitación esitosa!';
+  let replyMessage = '¡Invitación etsitosa!';
   slack.reply(200, { ok: true });
 
   // make invitation request
