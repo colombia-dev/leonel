@@ -63,7 +63,9 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
  */
 controller.on('team_join', onboard);
 
-
+/**
+ * Invited guests
+ */
 controller.hears(['mis panas', 'invitados'], 'direct_message', invitados);
 
 /**
