@@ -66,7 +66,7 @@ controller.on('team_join', onboard);
 /**
  * Invited guests
  */
-controller.hears(['mis panas', 'invitados'], 'direct_message', guests);
+controller.hears(['mis parceros', 'invitados'], 'direct_message', guests);
 
 /**
  * Help
