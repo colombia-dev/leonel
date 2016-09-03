@@ -7,7 +7,7 @@ checkConfig(config, ['SLACK_TOKEN', 'SLACK_ADMIN_TOKEN', 'SLACK_TEAM_NAME', 'DEB
 const Botkit = require('botkit');
 const invite = require('./lib/invite');
 const onboard = require('./lib/onboard');
-const invitados = require('./lib/invitados');
+const guests = require('./lib/guests');
 const storage = require('botkit-storage-mongo')({ mongoUri: config.MONGO_URI });
 const debug = require('debug')('bot:main');
 const packageInfo = require('./package.json');
@@ -66,7 +66,7 @@ controller.on('team_join', onboard);
 /**
  * Invited guests
  */
-controller.hears(['mis panas', 'invitados'], 'direct_message', invitados);
+controller.hears(['mis panas', 'invitados'], 'direct_message', guests);
 
 /**
  * Help
