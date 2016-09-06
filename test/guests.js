@@ -55,37 +55,25 @@ test('it replies when user has not guests', t => {
   });
 });
 
-test('it replies when user has not active guests', t => {
-  t.plan(1);
-
-  let { bot, message } = t.context;
-  let { storage } = bot.botkit;
-  let reply = 'No hay parceros activos, invitá uno ome!';
-
-  let hostData = {
-    guests: [{ guest: 'previous@gmail.com', result: 'already_invited' }],
-  };
-
-  storage.users.get.callsArgWith(1, null, hostData);
-
-  return guests(bot, message).then(() => {
-    t.is(bot.reply.args[0][1], reply, 'bot replied');
-  });
-});
-
 test('it replies when user has active guests', t => {
   t.plan(1);
+
+  let guestsInviteResults = {
+    ok: 'Invitado',
+    already_invited: 'Ya se invitó',
+    already_in_team: 'Ya está registrado',
+  };
 
   let { bot, message } = t.context;
   let { storage } = bot.botkit;
   let activeGuests = [
     { guest: 'previous@gmail.com', result: 'ok' },
-    { guest: 'foo@gmail.com', result: 'ok' },
+    { guest: 'foo@gmail.com', result: 'already_in_team' },
   ];
   let reply = [
     'Tus parceros:',
     '\n',
-    `${activeGuests.map((guest) => guest.guest).join('\n')}`,
+    `${activeGuests.map((guest) => `${guest.guest}: ${guestsInviteResults[guest.result]}`).join('\n')}`,
   ].join(' ');
 
   let hostData = {
