@@ -28,7 +28,6 @@ let bot = controller.spawn({
 });
 
 bot.startRTM((err, bot, payload) => {
-  debug('err', err);
   if (err) { throw new Error('Could not connect to Slack'); }
 });
 
@@ -66,7 +65,7 @@ controller.on('team_join', onboard);
 /**
  * Invited guests
  */
-controller.hears(['mis parceros', 'invitados'], 'direct_message', guests);
+controller.hears(['parceros', 'llaverias', 'neas', 'ñeros', 'invitados'], 'direct_message', guests);
 
 /**
  * Help

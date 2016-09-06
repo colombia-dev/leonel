@@ -16,7 +16,7 @@ test.beforeEach(t => {
   let bot = new BotHelper({ storage });
   let message = new MessageHelper({
     user: 'userID',
-    match: ['invitados', 'mis parceros'],
+    match: ['parceros', 'llaverias', 'neas', 'ñeros', 'invitados'],
   });
 
   // setup user stubbed data
@@ -42,7 +42,7 @@ test('it replies when user has not guests', t => {
 
   let { bot, message } = t.context;
   let { storage } = bot.botkit;
-  let reply = 'Oiga, invitá un parcero primero!';
+  let reply = 'Oe, invitá un parcero primero!';
 
   let hostData = {
     guests: [],
@@ -96,5 +96,21 @@ test('it replies when user has active guests', t => {
 
   return guests(bot, message).then(() => {
     t.is(bot.reply.args[0][1], reply, 'bot replied');
+  });
+});
+
+test('it replies with error message if something along flow errors', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+  let reply = 'Error - servidor falló';
+
+  // force database failure
+  storage.users.get.callsArgWith(1, new Error('fake db failure'), {});
+
+  // make invitation request
+  return guests(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'called with text');
   });
 });
