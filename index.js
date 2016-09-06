@@ -7,6 +7,7 @@ checkConfig(config, ['SLACK_TOKEN', 'SLACK_ADMIN_TOKEN', 'SLACK_TEAM_NAME', 'DEB
 const Botkit = require('botkit');
 const invite = require('./lib/invite');
 const onboard = require('./lib/onboard');
+const guests = require('./lib/guests');
 const storage = require('botkit-storage-mongo')({ mongoUri: config.MONGO_URI });
 const debug = require('debug')('bot:main');
 const packageInfo = require('./package.json');
@@ -60,6 +61,11 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
  * slack events easily right now
  */
 controller.on('team_join', onboard);
+
+/**
+ * Invited guests
+ */
+controller.hears(['parceros', 'llaverias', 'neas', 'ñeros', 'invitados'], 'direct_message', guests);
 
 /**
  * Help

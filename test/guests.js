@@ -1,0 +1,104 @@
+'use strict';
+
+// = require modules
+const test = require('ava');
+const moment = require('moment');
+const guests = require('../lib/guests');
+
+// = require test helpers
+const BotHelper = require('./helpers/bot');
+const StorageHelper = require('./helpers/storage');
+const MessageHelper = require('./helpers/message');
+
+test.beforeEach(t => {
+  // initialize helpers
+  let storage = new StorageHelper();
+  let bot = new BotHelper({ storage });
+  let message = new MessageHelper({
+    user: 'userID',
+    match: ['parceros', 'llaverias', 'neas', 'ñeros', 'invitados'],
+  });
+
+  // setup user stubbed data
+  let createdAt = moment().subtract(100, 'days');
+  let hostData = {
+    id: message.user,
+    createdAt,
+  };
+
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  // export context
+  t.context = {
+    bot,
+    message,
+    hostData,
+  };
+
+});
+
+test('it replies when user has not guests', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+  let reply = 'Oe, invitá un parcero primero!';
+
+  let hostData = {
+    guests: [],
+  };
+
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  return guests(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied');
+  });
+});
+
+test('it replies when user has active guests', t => {
+  t.plan(1);
+
+  let guestsInviteResults = {
+    ok: 'Invitado',
+    already_invited: 'Ya se invitó',
+    already_in_team: 'Ya está registrado',
+  };
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+  let activeGuests = [
+    { guest: 'previous@gmail.com', result: 'ok' },
+    { guest: 'foo@gmail.com', result: 'already_in_team' },
+  ];
+  let reply = [
+     'Tus parceros:',
+    '\n',
+    `${activeGuests.map((guest) => `${guest.guest}: ${guestsInviteResults[guest.result] || guest.result}`).join('\n')}`,
+  ].join(' ');
+
+  let hostData = {
+    guests: activeGuests,
+  };
+
+  storage.users.get.callsArgWith(1, null, hostData);
+
+  return guests(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied');
+  });
+});
+
+test('it replies with error message if something along flow errors', t => {
+  t.plan(1);
+
+  let { bot, message } = t.context;
+  let { storage } = bot.botkit;
+  let reply = 'Error - servidor falló';
+
+  // force database failure
+  storage.users.get.callsArgWith(1, new Error('fake db failure'), {});
+
+  // make invitation request
+  return guests(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'called with text');
+  });
+});
