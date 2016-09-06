@@ -71,9 +71,9 @@ test('it replies when user has active guests', t => {
     { guest: 'foo@gmail.com', result: 'already_in_team' },
   ];
   let reply = [
-    'Tus parceros:',
+     'Tus parceros:',
     '\n',
-    `${activeGuests.map((guest) => `${guest.guest}: ${guestsInviteResults[guest.result]}`).join('\n')}`,
+    `${activeGuests.map((guest) => `${guest.guest}: ${guestsInviteResults[guest.result] || guest.result}`).join('\n')}`,
   ].join(' ');
 
   let hostData = {
