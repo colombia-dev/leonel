@@ -30,6 +30,25 @@ Things are looking good if the console prints something like:
 ava
 ```
 
+### JavaScript Style
+
+In order to minimize code style differences, we have adopted the [StandardJS][standard] style. Please make sure your changes are compatible with the guide.
+
+**note: you can check compatibility by running tests**
+
+```
+npm test
+```
+
+**note: you may also be able to automatically fix any style issues with the `standard` tool**
+
+```
+standard --fix
+```
+
+Please see the documentation at [StandardJS][standard] for more information.
+
+
 ## Acknowledgements
 
 This code uses the [botkit](https://github.com/howdyai/botkit) npm module by the fine folks at Howdy.ai.
@@ -39,3 +58,4 @@ This code uses the [botkit](https://github.com/howdyai/botkit) npm module by the
 See the [LICENSE](LICENSE.md) file (MIT).
 
 [env]: .envrc.example
+[standard]: http://standardjs.com
