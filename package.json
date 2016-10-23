@@ -35,7 +35,7 @@
     "moment": "^2.13.0",
     "mongodb": "^2.2.4",
     "superagent": "^2.2.0",
-    "superagent-bluebird-promise": "^3.0.0"
+    "superagent-bluebird-promise": "^4.1.0"
   },
   "devDependencies": {
     "ava": "^0.16.0",
