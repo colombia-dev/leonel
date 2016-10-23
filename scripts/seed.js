@@ -1,30 +1,29 @@
-'use strict';
+'use strict'
 
-const Promise = require('bluebird');
-const Botkit = require('botkit');
-const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI });
+const Promise = require('bluebird')
+const Botkit = require('botkit')
+const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI })
 
-let updates = [];
+let updates = []
 
 // Expect a SLACK_TOKEN environment variable
-let token = process.env.SLACK_TOKEN;
+let token = process.env.SLACK_TOKEN
 if (!token) {
-  console.error('SLACK_TOKEN is required!');
-  process.exit(1);
+  console.error('SLACK_TOKEN is required!')
+  process.exit(1)
 }
 
-let controller = Botkit.slackbot({ storage });
-let bot = controller.spawn({ token });
-let userSave = Promise.promisify(bot.botkit.storage.users.save);
-let userGet = Promise.promisify(bot.botkit.storage.users.get);
+let controller = Botkit.slackbot({ storage })
+let bot = controller.spawn({ token })
+let userSave = Promise.promisify(bot.botkit.storage.users.save)
+let userGet = Promise.promisify(bot.botkit.storage.users.get)
 
 bot.api.users.list({}, (err, res) => {
-  if (err) { throw err; }
+  if (err) { throw err }
 
   res.members.forEach(member => {
-
     userGet(member.id).then((user) => {
-      console.log('%s', member.name);
+      console.log('%s', member.name)
       let updatedUser = {
         id: member.id,
         name: member.name,
@@ -35,15 +34,15 @@ bot.api.users.list({}, (err, res) => {
         is_owner: member.is_owner,
         is_admin: member.is_admin,
         is_bot: member.is_bot,
-        createdAt: (user && user.createdAt) || Date.now(),
-      };
+        createdAt: (user && user.createdAt) || Date.now()
+      }
 
-      updates.push(userSave(updatedUser));
-    });
-  });
-  setTimeout(()=> {
+      updates.push(userSave(updatedUser))
+    })
+  })
+  setTimeout(() => {
     Promise.all(updates).then(() => {
-      console.log('%s users updated', updates.length);
-    });
-  }, 5000);
-});
+      console.log('%s users updated', updates.length)
+    })
+  }, 5000)
+})
