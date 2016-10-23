@@ -33,7 +33,7 @@
     "debug": "^2.2.0",
     "lodash": "^4.16.4",
     "moment": "^2.13.0",
-    "mongodb": "^2.2.4",
+    "mongodb": "^2.2.11",
     "superagent": "^2.2.0",
     "superagent-bluebird-promise": "^4.1.0"
   },
