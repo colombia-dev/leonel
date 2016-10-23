@@ -1,19 +1,19 @@
-'use strict';
+'use strict'
 
-const debug = require('debug')('helper:message');
+const debug = require('debug')('helper:message')
 
-function Message(opts) {
-  opts = opts || {};
+function Message (opts) {
+  opts = opts || {}
 
-  debug('init', opts);
+  debug('init', opts)
 
-  let match = opts.match || '*.';
-  let user = opts.user || 'user123';
+  let match = opts.match || '*.'
+  let user = opts.user || 'user123'
 
   return {
     match,
-    user,
-  };
+    user
+  }
 }
 
-module.exports = Message;
+module.exports = Message

@@ -1,33 +1,33 @@
-'use strict';
+'use strict'
 
-const sinon = require('sinon');
-const debug = require('debug')('helper:bot');
+const sinon = require('sinon')
+const debug = require('debug')('helper:bot')
 
-let noop = () => {};
+let noop = () => {}
 
-function say(opts, cb) {
-  debug('say');
-  cb = cb || noop;
-  cb(null);
+function say (opts, cb) {
+  debug('say')
+  cb = cb || noop
+  cb(null)
 }
 
-function reply(message, content, cb) {
-  debug('reply');
-  cb = cb || noop;
-  cb(null);
+function reply (message, content, cb) {
+  debug('reply')
+  cb = cb || noop
+  cb(null)
 }
 
-function Bot(opts) {
-  opts = opts || {};
+function Bot (opts) {
+  opts = opts || {}
 
-  debug('init', opts);
+  debug('init', opts)
 
-  let storage = opts.storage || {};
-  let conversation = { say: sinon.spy() };
+  let storage = opts.storage || {}
+  let conversation = { say: sinon.spy() }
 
-  function startPrivateConversation(opts, cb) {
-    debug('startPrivateConversation', opts);
-    cb(null, conversation);
+  function startPrivateConversation (opts, cb) {
+    debug('startPrivateConversation', opts)
+    cb(null, conversation)
   }
 
   let bot = {
@@ -36,15 +36,15 @@ function Bot(opts) {
     startPrivateConversation,
     conversation,
     botkit: {
-      storage,
-    },
-  };
+      storage
+    }
+  }
 
-  sinon.spy(bot, 'reply');
-  sinon.spy(bot, 'say');
-  sinon.spy(bot, 'startPrivateConversation');
+  sinon.spy(bot, 'reply')
+  sinon.spy(bot, 'say')
+  sinon.spy(bot, 'startPrivateConversation')
 
-  return bot;
+  return bot
 }
 
-module.exports = Bot;
+module.exports = Bot
