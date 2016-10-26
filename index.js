@@ -75,9 +75,28 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
     'Yo respondo a:',
     '- `/dm @leonel invite a me@example.com` para enviar una invitación a este Slack.',
     '- `@leonel ayuda/help` para ver este mensaje.',
+    '- `@leonel coqueto` por que así soy yo',
+    '- mira `@leonel clausulas` si no podés invitar a tu parcero.',
     `... y me podés estender en ${packageInfo.homepage}`
   ].join('\n')
   bot.reply(message, help)
+})
+
+/**
+ * Clausulas
+ */
+controller.hears(['clausulas', 'clausulas', 'clause', 'why'], ['direct_message', 'direct_mention'], (bot, message) => {
+  let clause = [
+    'Si no podés invitar a tu parcero mira esto:',
+    '- El servidor encontro un problema, podés tratar de nuevo pero mira lo siguiente antes :troll:',
+    '- Debes de tener 45 días de ser parcero de la comunidad para invitar a alguien :beers:',
+    '- Posiblemente no encontre tu usuario, acuerdate que soy coqueto :heart_eyes:',
+    '- Tu parcero ya tiene una invitación pendiente por alguien más ó ya está en esta comunidad :shark:',
+    '- La invitación no se envio o no funciono :troll: (Trata de nuevo)',
+    '- Agotaste la cantidad de invitaciones por mes... Veo que tienes muchos parceros... miralos con `@leonel parceros` :metal:',
+    'Si nada de lo que te dije es el caso, ahora si pregunta a alguien más como :buritica:'
+  ].join('\n')
+  bot.reply(message, clause)
 })
 
 /**
