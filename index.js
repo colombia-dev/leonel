@@ -113,6 +113,14 @@ controller.hears(['baires', 'bairesdev', 'BairesDev', 'bairesDev'], ['direct_mes
 })
 
 /**
+ * Source || Where are you?
+ */
+controller.hears(['source', 'donde', 'where'], ['direct_message', 'direct_mention'], (bot, message) => {
+  let source = [`Parcero, aquí estoy... ${packageInfo.homepage}`].join('\n')
+  bot.reply(message, source)
+})
+
+/**
  * Channel Debugging
  */
 controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
