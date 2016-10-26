@@ -100,6 +100,19 @@ controller.hears(['clausulas', 'clausulas', 'clause', 'why'], ['direct_message',
 })
 
 /**
+ * BairesDev
+ */
+controller.hears(['baires', 'bairesdev', 'BairesDev', 'bairesDev'], ['direct_message', 'direct_mention'], (bot, message) => {
+  let bairesdev = [
+    '¿Me preguntas por BairesDev?, esto es lo que yo se:',
+    '- Tienen un bot de Spamming (Que nunca arreglan) :troll:',
+    '- Son falta de respuesta.',
+    '- Tenemos algunos parceros que han trabajado con ellos y aunque tienen una `buena experiencia` con ellos recibimos una mayor cantidad de quejas sobre ellos. :imp:'
+  ].join('\n')
+  bot.reply(message, bairesdev)
+})
+
+/**
  * Channel Debugging
  */
 controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
