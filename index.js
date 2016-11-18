@@ -106,7 +106,7 @@ controller.hears(['baires', 'bairesdev', 'BairesDev', 'bairesDev'], ['direct_mes
   let bairesdev = [
     '¿Me preguntas por BairesDev?, esto es lo que yo se:',
     '- Tienen un bot de Spamming (Que nunca arreglan) :troll:',
-    '- Son falta de respuesta.',
+    '- No dan respuesta.',
     '- Tenemos algunos parceros que han trabajado con ellos y aunque tienen una `buena experiencia` con ellos recibimos una mayor cantidad de quejas sobre ellos. :imp:'
   ].join('\n')
   bot.reply(message, bairesdev)
