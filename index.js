@@ -85,7 +85,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
 /**
  * Clausulas
  */
-controller.hears(['clausulas', 'clausulas', 'clause', 'why'], ['direct_message', 'direct_mention'], (bot, message) => {
+controller.hears(['clausulas', 'clausula', 'clause', 'why'], ['direct_message', 'direct_mention'], (bot, message) => {
   let clause = [
     'Si no podés invitar a tu parcero mira esto:',
     '- El servidor encontro un problema, podés tratar de nuevo pero mira lo siguiente antes :troll:',
