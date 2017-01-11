@@ -33,14 +33,13 @@ test.beforeEach(t => {
     bot,
     message,
     hostData
-  }  
+  }
 })
 
 test('it replies for clauses', t => {
   t.plan(1)
 
   let { bot, message } = t.context
-  let { storage } = bot.botkit
   let reply = [
     'Si no podés invitar a tu parcero mira esto:',
     '- El servidor encontro un problema, podés tratar de nuevo pero mira lo siguiente antes :troll:',
