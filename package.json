@@ -42,7 +42,7 @@
     "jscs": "^3.0.7",
     "nock": "^9.0.0",
     "sinon": "^1.17.3",
-    "standard": "^8.4.0"
+    "standard": "^9.0.0"
   },
   "engines": {
     "node": "7.4.x",
