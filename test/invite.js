@@ -85,7 +85,7 @@ test('it restricts accounts older than 45 days from sending invitations', (t) =>
   let { bot, message } = t.context
   let { storage } = bot.botkit
   let clock = sinon.useFakeTimers(moment.now())
-  let reply = `Error - debes esperar 45 días para poder invitar a otras personas`
+  let reply = 'Error - debes esperar 45 días para poder invitar a otras personas'
 
   let hostData = {
     id: message.user,
@@ -258,7 +258,7 @@ test('it replies and logs error message if user has already joined team', t => {
   })
 })
 
-test('it replies with error message if something along flow errors', t => {
+test('it replies with default error message if something along flow errors with no message', t => {
   t.plan(2)
 
   let { bot, message } = t.context
@@ -266,7 +266,7 @@ test('it replies with error message if something along flow errors', t => {
   let reply = 'Error - esa invitación no funcionó, échele una miradita al log'
 
   // force database failure
-  storage.users.get.callsArgWith(1, new Error('fake db failure'), {})
+  storage.users.get.callsArgWith(1, new Error(), {})
 
   // make invitation request
   return invite(bot, message).then(() => {
