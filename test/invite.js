@@ -193,7 +193,7 @@ test('it replies with error message if user has no data', t => {
 
   let { bot, message } = t.context
   let { storage } = bot.botkit
-  let reply = 'Creo que mi base de datos tiene un error, puedes reportar esto en https://github.com/colombia-dev/leonel/issues/new ?'
+  let reply = 'Creo que mi base de datos tiene un error, podés reportar esto en https://github.com/colombia-dev/leonel/issues/new ?'
 
   // force database failure
   storage.users.get.callsArgWith(1, null, null)
@@ -210,7 +210,7 @@ test('it replies and logs error message if user has already been invited', t => 
 
   let { slack, bot, message, guest, createdAt } = t.context
   let { storage } = bot.botkit
-  let reply = `No puedes invitar a ${guest} por que ya lo invitaron.`
+  let reply = `No podés invitar a ${guest} por que ya lo invitaron.`
 
   // slack reponds with 200 and `ok:false` when things dont work ¯\_(ツ)_/¯
   slack.reply(200, { ok: false, error: 'already_invited' })
@@ -238,7 +238,7 @@ test('it replies and logs error message if user has already joined team', t => {
 
   let { slack, bot, message, guest, createdAt } = t.context
   let { storage } = bot.botkit
-  let reply = `No puedes invitar a ${guest} por que ya tiene cuenta en este Slack.`
+  let reply = `No podés invitar a ${guest} por que ya tiene cuenta en este Slack.`
 
   // slack reponds with 200 and `ok:false` when things dont work ¯\_(ツ)_/¯
   slack.reply(200, { ok: false, error: 'already_in_team' })
