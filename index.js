@@ -81,6 +81,13 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
 })
 
 /**
+ * Repo
+ */
+controller.hears('repo', ['direct_mention', 'direct_message'], (bot, message) => {
+  bot.reply(message, `🏡 ${packageInfo.homepage}`)
+})
+
+/**
  * Channel Debugging
  */
 controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {

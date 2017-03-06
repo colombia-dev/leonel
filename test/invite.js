@@ -87,7 +87,7 @@ test('it restricts accounts older than 45 days from sending invitations', (t) =>
   let { bot, message } = t.context
   let { storage } = bot.botkit
   let clock = sinon.useFakeTimers(moment.now())
-  let reply = 'Error - debes esperar 45 días para poder invitar a otras personas'
+  let reply = 'Debes ser miembro :coldev: por 45 días más pa poder invitar gente.'
 
   let hostData = {
     id: message.user,
@@ -193,7 +193,7 @@ test('it replies with error message if user has no data', t => {
 
   let { bot, message } = t.context
   let { storage } = bot.botkit
-  let reply = 'Error - hubo un problema encontrando su cuenta'
+  let reply = 'Creo que mi base de datos tiene un error, puedes reportar esto en https://github.com/colombia-dev/leonel/issues/new ?'
 
   // force database failure
   storage.users.get.callsArgWith(1, null, null)
@@ -210,7 +210,7 @@ test('it replies and logs error message if user has already been invited', t => 
 
   let { slack, bot, message, guest, createdAt } = t.context
   let { storage } = bot.botkit
-  let reply = `Error - a ${guest} ya lo invitaron`
+  let reply = `No puedes invitar a ${guest} por que ya lo invitaron.`
 
   // slack reponds with 200 and `ok:false` when things dont work ¯\_(ツ)_/¯
   slack.reply(200, { ok: false, error: 'already_invited' })
@@ -238,7 +238,7 @@ test('it replies and logs error message if user has already joined team', t => {
 
   let { slack, bot, message, guest, createdAt } = t.context
   let { storage } = bot.botkit
-  let reply = `Error - ${guest} ya tiene cuenta en este Slack`
+  let reply = `No puedes invitar a ${guest} por que ya tiene cuenta en este Slack.`
 
   // slack reponds with 200 and `ok:false` when things dont work ¯\_(ツ)_/¯
   slack.reply(200, { ok: false, error: 'already_in_team' })
@@ -265,7 +265,7 @@ test('it replies with default error message if something along flow errors with 
 
   let { bot, message } = t.context
   let { storage } = bot.botkit
-  let reply = 'Error - esa invitación no funcionó, échele una miradita al log'
+  let reply = '😱 ¡Tu invitación no funcionó! Reporta el error en https://github.com/colombia-dev/leonel/issues/new'
 
   // force database failure
   storage.users.get.callsArgWith(1, new Error(), {})
@@ -282,7 +282,7 @@ test('it restricts accounts with 0 invites left from sending invitations', (t) =
 
   let { bot, message, hostData } = t.context
   let { storage } = bot.botkit
-  let reply = `Error - has agotado tus invitaciones mensuales, intenta de nuevo el 1ro del mes`
+  let reply = 'Has agotado tus invitaciones mensuales. El 1ro de cada mes repartimos 1 invitación por usuario.'
 
   hostData.invites = 0
   storage.users.get.callsArgWith(1, null, hostData)
@@ -339,7 +339,7 @@ test('it prevents non-maintainers from sending invites on staging environment', 
   t.plan(1)
   let { bot, message, hostData } = t.context
   let { storage } = bot.botkit
-  let reply = 'Error - solo los maintainers pueden enviar invitaciones con @leonel-test'
+  let reply = 'Solo los maintainers pueden enviar invitaciones con @leonel-test'
 
   // create local staging environment
   const env = _.defaults({BOT_ENV: 'staging'}, process.env)
