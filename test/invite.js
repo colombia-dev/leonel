@@ -2,6 +2,8 @@
 
 // = require modules
 const test = require('ava')
+const _ = require('lodash')
+const proxyquire = require('proxyquire')
 const invite = require('../lib/invite')
 const nock = require('nock')
 const querystring = require('querystring')
@@ -330,5 +332,48 @@ test('it doesn\'t update the amount of invitations left if there was an error', 
   return invite(bot, message).then(() => {
     let invites = storage.users.save.args[0][0].invites
     t.is(invites, 3, 'invites are subtracted')
+  })
+})
+
+test('it prevents non-maintainers from sending invites on staging environment', (t) => {
+  t.plan(1)
+  let { bot, message, hostData } = t.context
+  let { storage } = bot.botkit
+  let reply = 'Error - solo los maintainers pueden enviar invitaciones con @leonel-test'
+
+  // create local staging environment
+  const env = _.defaults({BOT_ENV: 'staging'}, process.env)
+  const localInvite = proxyquire('../lib/invite', {
+    'process': {env}
+  })
+
+  storage.users.get.callsArgWith(1, null, hostData)
+
+  // make invitation request
+  return localInvite(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied')
+  })
+})
+
+test('it allows maintainers to send invites on staging environment', (t) => {
+  t.plan(1)
+  let { bot, message, hostData, slack } = t.context
+  let { storage } = bot.botkit
+  let reply = '¡Invitación etsitosa!'
+
+  // create local staging environment
+  const env = _.defaults({BOT_ENV: 'staging'}, process.env)
+  const localInvite = proxyquire('../lib/invite', {
+    'process': {env}
+  })
+
+  slack.reply(200, { ok: true })
+
+  hostData.is_maintainer = true
+  storage.users.get.callsArgWith(1, null, hostData)
+
+  // make invitation request
+  return localInvite(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied')
   })
 })
