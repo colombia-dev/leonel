@@ -87,7 +87,7 @@ test('it restricts accounts older than 45 days from sending invitations', (t) =>
   let { bot, message } = t.context
   let { storage } = bot.botkit
   let clock = sinon.useFakeTimers(moment.now())
-  let reply = 'Debes ser miembro :coldev: por 45 días más para tener privilegios de invitación.'
+  let reply = 'Debes ser miembro :coldev: por 45 días más pa poder invitar gente.'
 
   let hostData = {
     id: message.user,
@@ -193,7 +193,7 @@ test('it replies with error message if user has no data', t => {
 
   let { bot, message } = t.context
   let { storage } = bot.botkit
-  let reply = 'Error - hubo un problema encontrando tu cuenta'
+  let reply = 'Creo que mi base de datos tiene un error, puedes reportar esto en https://github.com/colombia-dev/leonel/issues/new ?'
 
   // force database failure
   storage.users.get.callsArgWith(1, null, null)
