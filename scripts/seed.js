@@ -1,48 +1,65 @@
 'use strict'
 
+/**
+ * Require Modules
+ */
 const Promise = require('bluebird')
 const Botkit = require('botkit')
-const storage = require('botkit-storage-mongo')({ mongoUri: process.env.MONGO_URI })
+const monk = require('monk')
+const debug = require('debug')('bot:script:seed')
 
-let updates = []
+/**
+ * Local Variables
+ */
+const {MONGO_URI, SLACK_TOKEN: token} = require('process').env
+if (!MONGO_URI) throw new Error('MONGO_URI is not set')
+if (!token) throw new Error('SLACK_TOKEN is required!')
 
-// Expect a SLACK_TOKEN environment variable
-let token = process.env.SLACK_TOKEN
-if (!token) {
-  console.error('SLACK_TOKEN is required!')
-  process.exit(1)
+const db = monk(MONGO_URI)
+const users = db.get('users')
+const updates = []
+
+const controller = Botkit.slackbot()
+const bot = controller.spawn({ token })
+
+/**
+ * Updates
+ * @param  {[type]} member [description]
+ * @return {[type]}        [description]
+ */
+function updateMember (member) {
+  const invites = 1
+  const {id, name, is_owner, is_admin, is_bot} = member
+  const {real_name_normalized: real_name, email} = member.profile
+  const $set = {
+    id,
+    name,
+    real_name,
+    email,
+    invites,
+    is_owner,
+    is_admin,
+    is_bot
+  }
+  const $setOnInsert = {guests: [], createdAt: new Date()}
+
+  updates.push(
+    users.update({id}, {$set, $setOnInsert}, {upsert: true})
+    .then(() => debug(`updated ${member.name}`))
+  )
 }
 
-let controller = Botkit.slackbot({ storage })
-let bot = controller.spawn({ token })
-let userSave = Promise.promisify(bot.botkit.storage.users.save)
-let userGet = Promise.promisify(bot.botkit.storage.users.get)
-
+/**
+ * Make request to Slack API so we can get all users and then update them
+ */
 bot.api.users.list({}, (err, res) => {
   if (err) { throw err }
+  debug(`found ${res.members.length} members`)
 
-  res.members.forEach(member => {
-    userGet(member.id).then((user) => {
-      console.log('%s', member.name)
-      let updatedUser = {
-        id: member.id,
-        name: member.name,
-        real_name: member.profile.real_name_normalized,
-        email: member.profile.email,
-        guests: (user && user.guests) || [],
-        invites: 3,
-        is_owner: member.is_owner,
-        is_admin: member.is_admin,
-        is_bot: member.is_bot,
-        createdAt: (user && user.createdAt) || Date.now()
-      }
+  res.members.forEach(updateMember)
 
-      updates.push(userSave(updatedUser))
-    })
+  Promise.all(updates).then(() => {
+    debug('seed complete')
+    process.exit()
   })
-  setTimeout(() => {
-    Promise.all(updates).then(() => {
-      console.log('%s users updated', updates.length)
-    })
-  }, 5000)
 })
