@@ -184,7 +184,7 @@ test('it records empty guests', t => {
   })
 })
 
-test('it assigns 3 invites', t => {
+test('it assigns 1 invite', t => {
   t.plan(1)
 
   let { bot, message } = t.context
@@ -192,6 +192,6 @@ test('it assigns 3 invites', t => {
 
   // call onboarding
   return onboard(bot, message).then(() => {
-    t.is(storage.users.save.args[0][0].invites, 3, 'records user name')
+    t.is(storage.users.save.args[0][0].invites, 1, 'assings invite')
   })
 })

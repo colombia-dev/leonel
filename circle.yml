@@ -4,9 +4,8 @@ machine:
     MONGO_URI: "mongodb://localhost:27017/circle_test"
   node:
     version: 7.4.0
-
 dependencies:
-   override:
+  override:
     - yarn install
   cache_directories:
     - ~/.cache/yarn
