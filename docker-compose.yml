@@ -1,0 +1,15 @@
+version: '3'
+services:
+  bot:
+    build: .
+    tty: true
+    environment:
+      MONGO_URI: mongodb://db:27017/leonel
+      DEBUG: bot:*
+    env_file: slack.env
+    volumes:
+      - .:/usr/src/app
+  db:
+    image: "mongo:3.4"
+    ports:
+      - "27017:27017"
