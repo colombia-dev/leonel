@@ -6,7 +6,7 @@
 const Promise = require('bluebird')
 const Botkit = require('botkit')
 const monk = require('monk')
-const debug = require('debug')('bot:script:seed')
+const debug = require('debug')('bot:db:seed')
 
 /**
  * Local Variables
