@@ -29,6 +29,7 @@ let bot = controller.spawn({
 
 bot.startRTM((err, bot, payload) => {
   if (err) { throw new Error('Could not connect to Slack') }
+  debug('Estamos coneptados al Eslá')
 })
 
 controller.on('bot_channel_join', (bot, message) => {

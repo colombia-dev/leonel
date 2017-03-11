@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "test": "standard && ava",
-    "script:invites": "DEBUG=\"bot:*\" node scripts/give-invites"
+    "script:invites": "DEBUG=\"bot:*\" node scripts/give-invites",
+    "db:seed": "DEBUG=\"bot:*\" node scripts/seed",
+    "start:watch": "DEBUG=\"bot:*\" node_modules/.bin/nodemon -L index.js"
   },
   "repository": {
     "type": "git",
@@ -43,6 +45,7 @@
     "babel-preset-env": "^1.1.8",
     "jscs": "^3.0.7",
     "nock": "^9.0.0",
+    "nodemon": "^1.11.0",
     "sinon": "^1.17.3",
     "standard": "^9.0.0"
   },
