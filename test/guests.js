@@ -49,12 +49,9 @@ test('it replies when user has no guests', t => {
 
   storage.users.get.callsArgWith(1, null, hostData)
 
-  return guests(bot, message).then(() => t.is(bot.reply.args[0][1], reply, 'bot replied'))
+  return guests(bot, message)
+    .then(() => t.is(bot.reply.args[0][1], reply, 'bot replied'))
 })
-
-test.todo('it shows a guest that has already been invited')
-test.todo('it shows a guest that has already been invited')
-test.todo('it shows a guest that already had an account in this team')
 
 test('it shows succesful guests', t => {
   t.plan(1)
@@ -63,7 +60,7 @@ test('it shows succesful guests', t => {
   const { storage } = bot.botkit
 
   const reply =
-`Tus invitados:
+`*Tus invitados:*
   - ok@gmail.com
   - ok2@gmail.com`
 
@@ -76,9 +73,68 @@ test('it shows succesful guests', t => {
 
   storage.users.get.callsArgWith(1, null, hostData)
 
-  return guests(bot, message).then(() => {
-    t.is(bot.reply.args[0][1], reply, 'bot replied')
-  })
+  return guests(bot, message)
+    .then(() => t.is(bot.reply.args[0][1], reply, 'bot replied'))
+})
+
+test('it shows a guest that has already been invited', t => {
+  t.plan(1)
+
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
+
+  const reply =
+`*Tus invitados:*
+  - ok@gmail.com
+  - ok2@gmail.com
+
+*Estas personas ya habian sido invitadas:*
+  - already@gmail.com`
+
+  const hostData = {
+    guests: [
+      { guest: 'ok@gmail.com', result: 'ok' },
+      { guest: 'ok2@gmail.com', result: 'ok' },
+      { guest: 'already@gmail.com', result: 'already_invited' }
+    ]
+  }
+
+  storage.users.get.callsArgWith(1, null, hostData)
+
+  return guests(bot, message)
+    .then(() => t.is(bot.reply.args[0][1], reply, 'bot replied'))
+})
+
+test('it shows a guest that already had an account in this team', t => {
+  t.plan(1)
+
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
+
+  const reply =
+`*Tus invitados:*
+  - ok@gmail.com
+  - ok2@gmail.com
+
+*Estas personas ya habian sido invitadas:*
+  - already@gmail.com
+
+*Estas personas ya estaban en este Slack al invitarlas:*
+  - inteam@gmail.com`
+
+  const hostData = {
+    guests: [
+      { guest: 'ok@gmail.com', result: 'ok' },
+      { guest: 'ok2@gmail.com', result: 'ok' },
+      { guest: 'already@gmail.com', result: 'already_invited' },
+      { guest: 'inteam@gmail.com', result: 'already_in_team' }
+    ]
+  }
+
+  storage.users.get.callsArgWith(1, null, hostData)
+
+  return guests(bot, message)
+    .then(() => t.is(bot.reply.args[0][1], reply, 'bot replied'))
 })
 
 test('it replies with error message if something along flow errors', t => {
