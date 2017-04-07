@@ -66,17 +66,18 @@ controller.on('team_join', onboard)
 /**
  * Invited guests
  */
-controller.hears(['parceros', 'llaverias', 'neas', 'ñeros', 'invitados'], 'direct_message', guests)
+controller.hears(['invitados', 'amiguis', 'amigas', 'amigos', 'parceros'], 'direct_message', guests)
 
 /**
  * Help
  */
 controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, message) => {
-  let help = [
-    'Yo respondo a:',
-    '- `/dm @leonel invite a me@example.com` para enviar una invitación a este Slack.',
-    '- `@leonel ayuda/help` para ver este mensaje.',
-    `... y me podés estender en ${packageInfo.homepage}`
+  const help = [
+    `Yo respondo a:
+    - \`/dm @leonel invite a me@example.com\` para enviar una invitación a este Slack.
+    - \`/dm @leonel amiguis\` para saber a quien has invitado.
+    - \`@leonel ayuda/help\` para ver este mensaje.
+    ... y me podés estender en ${packageInfo.homepage}`
   ].join('\n')
   bot.reply(message, help)
 })
