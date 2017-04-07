@@ -51,8 +51,20 @@ controller.hears(['coqueto'], ['direct_mention', 'direct_message'], (bot, messag
  */
 controller.hears('invite a <mailto:(.*)\\|.*>', 'direct_message', invite)
 
+// force invites to come through DM
 controller.hears('invite', 'direct_mention', (bot, message) => {
   bot.reply(message, 'Invitaciones por DM por favor :soccer:')
+})
+
+/**
+ * List of people I have invited
+ */
+const myGuests = ['invitados', 'amiguis', 'amigas', 'amigos', 'parceros']
+controller.hears(myGuests, 'direct_message', guests)
+
+// force guest list requests to come through DMs
+controller.hears(myGuests, 'direct_mention', (bot, message) => {
+  bot.reply(message, 'Pideme tu lista de invitados por DM por favor :soccer:')
 })
 
 /**
@@ -62,11 +74,6 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
  * slack events easily right now
  */
 controller.on('team_join', onboard)
-
-/**
- * Invited guests
- */
-controller.hears(['invitados', 'amiguis', 'amigas', 'amigos', 'parceros'], 'direct_message', guests)
 
 /**
  * Help
