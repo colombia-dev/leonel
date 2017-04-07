@@ -51,8 +51,20 @@ controller.hears(['coqueto'], ['direct_mention', 'direct_message'], (bot, messag
  */
 controller.hears('invite a <mailto:(.*)\\|.*>', 'direct_message', invite)
 
+// force invites to come through DM
 controller.hears('invite', 'direct_mention', (bot, message) => {
   bot.reply(message, 'Invitaciones por DM por favor :soccer:')
+})
+
+/**
+ * List of people I have invited
+ */
+const myGuests = ['invitados', 'amiguis', 'amigas', 'amigos', 'parceros']
+controller.hears(myGuests, 'direct_message', guests)
+
+// force guest list requests to come through DMs
+controller.hears(myGuests, 'direct_mention', (bot, message) => {
+  bot.reply(message, 'Pideme tu lista de invitados por DM por favor :soccer:')
 })
 
 /**
@@ -64,19 +76,15 @@ controller.hears('invite', 'direct_mention', (bot, message) => {
 controller.on('team_join', onboard)
 
 /**
- * Invited guests
- */
-controller.hears(['parceros', 'llaverias', 'neas', 'ñeros', 'invitados'], 'direct_message', guests)
-
-/**
  * Help
  */
 controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, message) => {
-  let help = [
-    'Yo respondo a:',
-    '- `/dm @leonel invite a me@example.com` para enviar una invitación a este Slack.',
-    '- `@leonel ayuda/help` para ver este mensaje.',
-    `... y me podés estender en ${packageInfo.homepage}`
+  const help = [
+    `Yo respondo a:
+    - \`/dm @leonel invite a me@example.com\` para enviar una invitación a este Slack.
+    - \`/dm @leonel amiguis\` para saber a quien has invitado.
+    - \`@leonel ayuda/help\` para ver este mensaje.
+    ... y me podés estender en ${packageInfo.homepage}`
   ].join('\n')
   bot.reply(message, help)
 })
