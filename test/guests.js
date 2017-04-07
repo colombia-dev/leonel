@@ -16,7 +16,7 @@ test.beforeEach(t => {
   let bot = new BotHelper({ storage })
   let message = new MessageHelper({
     user: 'userID',
-    match: ['parceros', 'llaverias', 'neas', 'ñeros', 'invitados']
+    match: ['invitados', 'amiguis', 'amigas', 'amigos', 'parceros']
   })
 
   // setup user stubbed data
@@ -36,47 +36,42 @@ test.beforeEach(t => {
   }
 })
 
-test('it replies when user has not guests', t => {
+test('it replies when user has no guests', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
-  let reply = 'Oe, invitá un parcero primero!'
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
+  const reply = 'Oe, invitá un parcero primero!'
 
-  let hostData = {
+  const hostData = {
     guests: []
   }
 
   storage.users.get.callsArgWith(1, null, hostData)
 
-  return guests(bot, message).then(() => {
-    t.is(bot.reply.args[0][1], reply, 'bot replied')
-  })
+  return guests(bot, message).then(() => t.is(bot.reply.args[0][1], reply, 'bot replied'))
 })
 
-test('it replies when user has active guests', t => {
+test.todo('it shows a guest that has already been invited')
+test.todo('it shows a guest that has already been invited')
+test.todo('it shows a guest that already had an account in this team')
+
+test('it shows succesful guests', t => {
   t.plan(1)
 
-  let guestsInviteResults = {
-    ok: 'Invitado',
-    already_invited: 'Ya se invitó',
-    already_in_team: 'Ya está registrado'
-  }
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
-  let activeGuests = [
-    { guest: 'previous@gmail.com', result: 'ok' },
-    { guest: 'foo@gmail.com', result: 'already_in_team' }
-  ]
-  let reply = [
-    'Tus parceros:',
-    '\n',
-    `${activeGuests.map((guest) => `${guest.guest}: ${guestsInviteResults[guest.result] || guest.result}`).join('\n')}`
-  ].join(' ')
+  const reply =
+`Tus invitados:
+  - ok@gmail.com
+  - ok2@gmail.com`
 
-  let hostData = {
-    guests: activeGuests
+  const hostData = {
+    guests: [
+      { guest: 'ok@gmail.com', result: 'ok' },
+      { guest: 'ok2@gmail.com', result: 'ok' }
+    ]
   }
 
   storage.users.get.callsArgWith(1, null, hostData)
