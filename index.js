@@ -101,7 +101,7 @@ controller.hears('repo', ['direct_mention', 'direct_message'], (bot, message) =>
  */
 controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
   debug('message', JSON.stringify(message, null, 2))
-  bot.reply(message, 'Juegela!')
+  bot.reply(message, '¡Listo!, papito si es ya es ¡ya!')
 })
 
 /**
