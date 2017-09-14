@@ -9,10 +9,12 @@ function Message (opts) {
 
   let match = opts.match || '*.'
   let user = opts.user || 'user123'
+  let text = opts.text || ''
 
   return {
     match,
-    user
+    user,
+    text
   }
 }
 
