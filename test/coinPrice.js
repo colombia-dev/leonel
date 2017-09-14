@@ -26,13 +26,13 @@ test.beforeEach(t => {
 })
 
 test('it returns the actual price of the selected coin', (t) => {
-  t.plan(3)
+  t.plan(1)
 
   const { bot, message } = t.context
-  const reply = 'BTC = 3233.51'
+  const reply = 'BTC ='
 
   // make coin request
   return coinPrice(bot, message).then(() => {
-    t.is(bot.reply.args[0][1], reply, 'bot replied')
+    t.is(bot.reply.args[0][1].slice(0, 5), reply, 'bot replied')
   })
 })
