@@ -26,6 +26,7 @@ let controller = Botkit.slackbot({
 })
 
 let bot = controller.spawn({
+  retry: 10,
   token: slackToken
 })
 
