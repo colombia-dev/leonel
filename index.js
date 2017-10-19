@@ -8,6 +8,8 @@ const Botkit = require('botkit')
 const invite = require('./lib/invite')
 const onboard = require('./lib/onboard')
 const guests = require('./lib/guests')
+const coinPrice = require('./lib/coinPrice')
+const coinMiddleware = require('./middlewares/coinMiddleware')
 const storage = require('botkit-storage-mongo')({ mongoUri: config.MONGO_URI })
 const debug = require('debug')('bot:main')
 const packageInfo = require('./package.json')
@@ -84,6 +86,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
     `Yo respondo a:
     - \`/dm @leonel invite a me@example.com\` para enviar una invitación a este Slack.
     - \`/dm @leonel amiguis\` para saber a quien has invitado.
+    - \`/dm @leonel a cuanto esta (BTC|BCH|ETH|LTC|XRP)\` para saber el precio actual de las monedas.
     - \`@leonel ayuda/help\` para ver este mensaje.
     ... y me podés estender en ${packageInfo.homepage}`
   ].join('\n')
@@ -104,6 +107,11 @@ controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) =>
   debug('message', JSON.stringify(message, null, 2))
   bot.reply(message, '¡Listo papito! Si, es ya es ¡Ya!')
 })
+
+/**
+ * Crypto Currency price
+ */
+controller.hears('*', ['direct_metion', 'direct_message'], coinMiddleware, coinPrice)
 
 /**
  * Uncaught Messages
