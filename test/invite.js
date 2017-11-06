@@ -102,6 +102,27 @@ test('it restricts accounts older than 30 days from sending invitations', (t) =>
   })
 })
 
+test('it allows accounts on their 30 days to send invitations', (t) => {
+  t.plan(1)
+
+  let { bot, message } = t.context
+  let { storage } = bot.botkit
+  let clock = sinon.useFakeTimers(moment('2017-10-31 15:03:00').valueOf())
+  let reply = '¡Invitación etsitosa!'
+
+  let hostData = {
+    id: message.user,
+    createdAt: moment('2017-10-01 15:13:00').toDate()
+  }
+  storage.users.get.callsArgWith(1, null, hostData)
+
+  // make invitation request
+  return invite(bot, message).then(() => {
+    t.is(bot.reply.args[0][1], reply, 'bot replied')
+    clock.restore()
+  })
+})
+
 test('it allows accounts older than 30 days to send invitations', (t) => {
   t.plan(1)
 
