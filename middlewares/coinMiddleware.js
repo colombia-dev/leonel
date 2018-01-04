@@ -1,5 +1,5 @@
 function coinMiddleware (patterns, message) {
-  const re = /(BTC|BCH|ETH|LTC|XRP)/gi
+  const re = /(BTC|BCH|ETH|LTC|XRP|ADA|IOT|XEM|XLM|DASH)/gi
   if (re.test(message.text)) {
     return true
   }

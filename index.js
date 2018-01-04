@@ -86,7 +86,7 @@ controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, 
     `Yo respondo a:
     - \`/dm @leonel invite a me@example.com\` para enviar una invitación a este Slack.
     - \`/dm @leonel amiguis\` para saber a quien has invitado.
-    - \`/dm @leonel a cuanto esta (BTC|BCH|ETH|LTC|XRP)\` para saber el precio actual de las monedas.
+    - \`/dm @leonel a cuanto esta (BTC|BCH|ETH|LTC|XRP|ADA|IOT|XEM|XLM|DASH)\` para saber el precio actual de las monedas.
     - \`@leonel ayuda/help\` para ver este mensaje.
     ... y me podés estender en ${packageInfo.homepage}`
   ].join('\n')
