@@ -21,10 +21,11 @@ function sendMessageAsAdmin (bot) {
 function giveInvites (bot) {
   // It will run the first day of the month
   // (Seconds, Minutes, Hours, Day of Month, Months, Day of Week)
-  new CronJob('* * * 1 * *', async function () {
+  const cronJob = new CronJob('00 00 00 1 * *', async function () {
     await script()
     sendMessageAsAdmin(bot)
   }, null, true, 'America/New_York')
+  return cronJob
 }
 
 module.exports = { giveInvites }
