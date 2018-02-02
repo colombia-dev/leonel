@@ -13,6 +13,7 @@ const coinMiddleware = require('./middlewares/coinMiddleware')
 const storage = require('botkit-storage-mongo')({ mongoUri: config.MONGO_URI })
 const debug = require('debug')('bot:main')
 const packageInfo = require('./package.json')
+const { giveInvites } = require('./cron/giveInvites')
 
 // Expect a SLACK_TOKEN environment variable
 let slackToken = config.SLACK_TOKEN
@@ -33,6 +34,7 @@ let bot = controller.spawn({
 bot.startRTM((err, bot, payload) => {
   if (err) { throw new Error('Could not connect to Slack') }
   debug('Estamos coneptados al Eslá')
+  giveInvites(bot)
 })
 
 controller.on('bot_channel_join', (bot, message) => {
