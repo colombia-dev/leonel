@@ -1,12 +1,7 @@
-FROM node:7.7
-
-# Install Yarn
-RUN curl -o- -L https://yarnpkg.com/install.sh | bash
+FROM node:9.4
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install packages
-RUN cd /usr/src/app && yarn
-
-CMD [ "yarn", "start:watch" ]
+# run app
+CMD [ "npm", "run", "start:watch" ]
