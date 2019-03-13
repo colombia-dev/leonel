@@ -36,7 +36,7 @@ bot.startRTM((err, bot, payload) => {
 })
 
 controller.on('bot_channel_join', (bot, message) => {
-  bot.reply(message, '¡Listo papito, si es ya, es ya!')
+  bot.reply(message, '¡Listo, vamos ya!')
 })
 
 /**
@@ -45,7 +45,7 @@ controller.on('bot_channel_join', (bot, message) => {
 controller.hears(['coqueto'], ['direct_mention', 'direct_message'], (bot, message) => {
   bot.reply(
     message,
-    'Yo no soy coqueto... soy un tierno. https://www.youtube.com/watch?v=sFpdl0EiLkA&feature=youtu.be&t=223'
+    'Estas probandome... todo esta bien, pantalla azul?'
   )
 })
 
@@ -56,7 +56,7 @@ controller.hears('invite a <mailto:(.*)\\|.*>', 'direct_message', invite)
 
 // force invites to come through DM
 controller.hears('invite', 'direct_mention', (bot, message) => {
-  bot.reply(message, 'Invitaciones por DM por favor :soccer:')
+  bot.reply(message, 'Invitaciones por DM por favor')
 })
 
 /**
@@ -67,7 +67,7 @@ controller.hears(myGuests, 'direct_message', guests)
 
 // force guest list requests to come through DMs
 controller.hears(myGuests, 'direct_mention', (bot, message) => {
-  bot.reply(message, 'Pideme tu lista de invitados por DM por favor :soccer:')
+  bot.reply(message, 'Pideme tu lista de invitados por DM por favor')
 })
 
 /**
@@ -84,10 +84,10 @@ controller.on('team_join', onboard)
 controller.hears(['help', 'ayuda'], ['direct_message', 'direct_mention'], (bot, message) => {
   const help = [
     `Yo respondo a:
-    - \`/dm @leonel invite a me@example.com\` para enviar una invitación a este Slack.
-    - \`/dm @leonel amiguis\` para saber a quien has invitado.
-    - \`/dm @leonel a cuanto esta (BTC|BCH|ETH|LTC|XRP|ADA|IOT|XEM|XLM|DASH)\` para saber el precio actual de las monedas.
-    - \`@leonel ayuda/help\` para ver este mensaje.
+    - \`/dm @billgates invite a me@example.com\` para enviar una invitación a este Slack.
+    - \`/dm @billgates amiguis\` para saber a quien has invitado.
+    - \`/dm @billgates a cuanto esta (BTC|BCH|ETH|LTC|XRP|ADA|IOT|XEM|XLM|DASH)\` para saber el precio actual de las monedas.
+    - \`@billgates ayuda/help\` para ver este mensaje.
     ... y me podés estender en ${packageInfo.homepage}`
   ].join('\n')
   bot.reply(message, help)
@@ -105,7 +105,7 @@ controller.hears('repo', ['direct_mention', 'direct_message'], (bot, message) =>
  */
 controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) => {
   debug('message', JSON.stringify(message, null, 2))
-  bot.reply(message, '¡Listo papito! Si, es ya es ¡Ya!')
+  bot.reply(message, '¡Listo! pantala azul?')
 })
 
 /**

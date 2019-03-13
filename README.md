@@ -1,9 +1,8 @@
-# Leonel
-[![Circle CI](https://circleci.com/gh/colombia-dev/leonel.svg?style=svg)](https://circleci.com/gh/buritica/leonel)
+# BillGates
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 ## Overview
-Leonel is a bot we use to make our life easier for our [colombia-dev](http://colombia-dev.org) community
+Billgates is a bot we use to make our life easier for our Red Emprendimiento Med community
 
 ## Running locally for development
 
@@ -24,13 +23,13 @@ $ cp slack.env.example slack.env
 
 The only token that needs to be valid is `SLACK_TOKEN`, the rest can be placeholder unless you want to test the invitation or onboarding flows.
 
-After setting the right `SLACK_TOKEN` in your `slack.env` file, use `docker-compose` to bring up leonel:
+After setting the right `SLACK_TOKEN` in your `slack.env` file, use `docker-compose` to bring up billgates:
 
 ```bash
 $ docker-compose up
 ```
 
-Go to your Slack, and send a DM to leonel saying `coqueto`. He'll respond if he's up. You can run docker in a [detached state][detached] by using `docker-compose up -d` instead.
+Go to your Slack, and send a DM to billgates saying `coqueto`. He'll respond if he's up. You can run docker in a [detached state][detached] by using `docker-compose up -d` instead.
 
 #### Make changes
 
@@ -39,7 +38,7 @@ The docker-compose setup is configured to reboot the bot when any local file cha
 
 #### Seed users
 
-Leonel uses MongoDB to store specific information about users, you can create the user accounts by running:
+BIllgates uses MongoDB to store specific information about users, you can create the user accounts by running:
 
 ```bash
 $ docker-compose run bot yarn db:seed
@@ -79,7 +78,7 @@ $ docker-compose down
 
 #### Setup your environment
 
-All environment variables in [example env file][env] should be set before running Leonel.
+All environment variables in [example env file][env] should be set before running Billgates.
 
 Other requirements:
 - Yarn
@@ -92,7 +91,7 @@ Install dependencies:
 $ yarn
 ```
 
-Start leonel:
+Start billgates:
 
 ```bash
 $ yarn start
@@ -102,7 +101,7 @@ Things are looking good if the console prints something like:
 
 ```bash
 ** API CALL: https://slack.com/api/rtm.start
-** BOT ID:  leonel  ...attempting to connect to RTM!
+** BOT ID:  billgates  ...attempting to connect to RTM!
 ** API CALL: https://slack.com/api/chat.postMessage
 bot:main Estamos coneptados al Eslá
 ```
@@ -111,7 +110,7 @@ We have added `yarn start:watch` script which uses Nodemon for convenience durin
 
 #### Seed users
 
-Leonel uses MongoDB to store specific information about users, you can create the user accounts by running:
+BIllgates uses MongoDB to store specific information about users, you can create the user accounts by running:
 
 ```bash
 $ yarn db:seed

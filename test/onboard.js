@@ -26,10 +26,10 @@ test.beforeEach(t => {
   // so we extend it here before tests run
   message.user = {
     id: 'user123',
-    name: 'buritica',
+    name: 'davidalzate',
     profile: {
       real_name_normalized: 'My Name Normalized',
-      email: 'buritica@gmail.com'
+      email: 'davidalzate@gmail.com'
     },
     is_bot: false,
     is_admin: true,
@@ -42,8 +42,8 @@ test.serial('it welcomes new user on #intros', t => {
 
   let { bot, message } = t.context
   let introText = [
-    `Ole <@${message.user.id}|message.user.name>, que bueno tenerte por estas tierras.`,
-    'Pa romper el hielo, cuéntanos... ¿Dónde vives y a qué te dedicas?'
+     `Ole <@${message.user.id}|message.user.name>, que bueno tenerte por estas tierras.`,
+    'Pa romper el hielo, cuéntanos... Tu experiencia, En que proyectos estas?, que servicios/productos quieres promoveer?'
   ].join(' ')
   let introChannel = process.env.CHANNEL_INTROS
   let clock = sinon.useFakeTimers()
@@ -75,14 +75,10 @@ test('it welcomes new user in private conversation', t => {
   let { bot, message } = t.context
   let jobsChannel = process.env.CHANNEL_JOBS
   let welcomeText = [
-    '¡Hola! Ya que acabas de llegar por aquí te cuento unas cositas sobre colombia.dev: \n' +
-    '• Somos una comunidad de personas interesadas en programación y diseño ' +
-    'nacidas o residentes en :flag-co: \n' +
-    '• Hay diferentes canales organizados por tema, únete a los que te interesen. \n' +
-    `• <#${jobsChannel}|trabajos> es el único lugar donde se permiten ofertas o búsquedas laborales \n`,
-    'Finalmente, al pertenecer a esta comunidad adoptas nuestro código de conducta ' +
-    'https://github.com/colombia-dev/codigo-de-conducta/blob/master/README.md',
-    'Síguenos en twitter en https://twitter.com/colombia_dev'
+     '¡Hola! Ya que acabas de llegar por aquí te cuento unas cositas sobre Red Emprendimiento Med: \n' +
+      '• Somos una comunidad de personas interesadas en Emprendimiento ' +
+      'nacidas o residentes en Colombia \n' +
+      '• Hay diferentes canales organizados por tema, únete a los que te interesen. \n'
   ]
 
   // call onboarding

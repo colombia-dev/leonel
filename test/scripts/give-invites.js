@@ -18,9 +18,9 @@ const db = require('monk')(process.env.MONGO_URI)
 test.beforeEach(t => {
   t.context.users = db.get('users')
   const user = {
-    name: 'burititest',
-    real_name: 'Juan Tester Buritica',
-    email: 'burititester@gmail.com',
+    name: 'davidtest',
+    real_name: 'David Alzate',
+    email: 'davidalzate@gmail.com',
     guests: [],
     invites: 0,
     is_owner: false,

@@ -16,7 +16,7 @@ const StorageHelper = require('./helpers/storage')
 const MessageHelper = require('./helpers/message')
 
 test.beforeEach(t => {
-  let guest = 'buritica@gmail.com'
+  let guest = 'davidalzate@gmail.com'
 
   // initialize helpers
   let storage = new StorageHelper()
@@ -193,7 +193,7 @@ test('it replies with error message if user has no data', t => {
 
   let { bot, message } = t.context
   let { storage } = bot.botkit
-  let reply = 'Creo que mi base de datos tiene un error, podés reportar esto en https://github.com/colombia-dev/leonel/issues/new ?'
+  let reply = 'Creo que mi base de datos tiene un error, podés reportar esto en https://github.com/davidalzate/billgates/issues/new ?'
 
   // force database failure
   storage.users.get.callsArgWith(1, null, null)
@@ -265,7 +265,7 @@ test('it replies with default error message if something along flow errors with 
 
   let { bot, message } = t.context
   let { storage } = bot.botkit
-  let reply = '😱 ¡Tu invitación no funcionó! Reporta el error en https://github.com/colombia-dev/leonel/issues/new'
+  let reply = '😱 ¡Tu invitación no funcionó! Reporta el error en https://github.com/davidalzate/billgates/issues/new'
 
   // force database failure
   storage.users.get.callsArgWith(1, new Error(), {})
@@ -339,7 +339,7 @@ test('it prevents non-maintainers from sending invites on staging environment', 
   t.plan(1)
   let { bot, message, hostData } = t.context
   let { storage } = bot.botkit
-  let reply = 'Solo los maintainers pueden enviar invitaciones con @leonel-test'
+  let reply = 'Solo los maintainers pueden enviar invitaciones con @billgates-test'
 
   // create local staging environment
   const env = _.defaults({BOT_ENV: 'staging'}, process.env)
