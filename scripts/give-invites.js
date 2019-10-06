@@ -9,7 +9,7 @@ const monk = require('monk')
 /**
  * Local Variables
  */
-const {MONGO_URI} = require('process').env
+const { MONGO_URI } = require('process').env
 
 if (!MONGO_URI) throw new Error('MONGO_URI is not set')
 
@@ -21,7 +21,7 @@ const users = db.get('users')
  */
 function script () {
   debug('giving invites')
-  return users.update({}, {$set: {invites: 1}}, {multi: true})
+  return users.update({}, { $set: { invites: 1 } }, { multi: true })
     .then(() => debug('done'))
 }
 

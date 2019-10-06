@@ -12,16 +12,16 @@ const MessageHelper = require('./helpers/message')
 
 test.beforeEach(t => {
   // initialize helpers
-  let storage = new StorageHelper()
-  let bot = new BotHelper({ storage })
-  let message = new MessageHelper({
+  const storage = new StorageHelper()
+  const bot = new BotHelper({ storage })
+  const message = new MessageHelper({
     user: 'userID',
     match: ['invitados', 'amiguis', 'amigas', 'amigos', 'parceros']
   })
 
   // setup user stubbed data
-  let createdAt = moment().subtract(100, 'days')
-  let hostData = {
+  const createdAt = moment().subtract(100, 'days')
+  const hostData = {
     id: message.user,
     createdAt
   }
@@ -140,9 +140,9 @@ test('it shows a guest that already had an account in this team', t => {
 test('it replies with error message if something along flow errors', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
-  let reply = 'Error - servidor falló'
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
+  const reply = 'Error - servidor falló'
 
   // force database failure
   storage.users.get.callsArgWith(1, new Error('fake db failure'), {})

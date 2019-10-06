@@ -3,7 +3,7 @@
 const sinon = require('sinon')
 const debug = require('debug')('helper:bot')
 
-let noop = () => {}
+const noop = () => {}
 
 function say (opts, cb) {
   debug('say')
@@ -22,15 +22,15 @@ function Bot (opts) {
 
   debug('init', opts)
 
-  let storage = opts.storage || {}
-  let conversation = { say: sinon.spy() }
+  const storage = opts.storage || {}
+  const conversation = { say: sinon.spy() }
 
   function startPrivateConversation (opts, cb) {
     debug('startPrivateConversation', opts)
     cb(null, conversation)
   }
 
-  let bot = {
+  const bot = {
     reply,
     say,
     startPrivateConversation,

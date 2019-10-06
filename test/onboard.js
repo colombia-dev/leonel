@@ -12,9 +12,9 @@ const MessageHelper = require('./helpers/message')
 // setup good invitation test
 test.beforeEach(t => {
   // initialize helpers
-  let storage = new StorageHelper()
-  let bot = new BotHelper({ storage })
-  let message = new MessageHelper()
+  const storage = new StorageHelper()
+  const bot = new BotHelper({ storage })
+  const message = new MessageHelper()
 
   // export context
   t.context = {
@@ -40,18 +40,18 @@ test.beforeEach(t => {
 test.serial('it welcomes new user on #intros', t => {
   t.plan(2)
 
-  let { bot, message } = t.context
-  let introText = [
+  const { bot, message } = t.context
+  const introText = [
     `Ole <@${message.user.id}|message.user.name>, que bueno tenerte por estas tierras.`,
     'Pa romper el hielo, cuéntanos... ¿Dónde vives y a qué te dedicas?'
   ].join(' ')
-  let introChannel = process.env.CHANNEL_INTROS
-  let clock = sinon.useFakeTimers()
+  const introChannel = process.env.CHANNEL_INTROS
+  const clock = sinon.useFakeTimers()
 
   // call onboarding
   return onboard(bot, message).then(() => {
     clock.tick(3000)
-    let sayArgs = bot.say.args[0][0]
+    const sayArgs = bot.say.args[0][0]
 
     t.is(sayArgs.text, introText, 'welcomes user')
     t.is(sayArgs.channel, introChannel, 'uses right channel')
@@ -61,10 +61,10 @@ test.serial('it welcomes new user on #intros', t => {
 
 test('it starts a private conversation for onboarding', t => {
   t.plan(1)
-  let { bot, message } = t.context
+  const { bot, message } = t.context
 
   return onboard(bot, message).then(() => {
-    let user = bot.startPrivateConversation.args[0][0].user
+    const user = bot.startPrivateConversation.args[0][0].user
     t.is(user, message.user.id, 'private conversation started')
   })
 })
@@ -72,9 +72,9 @@ test('it starts a private conversation for onboarding', t => {
 test('it welcomes new user in private conversation', t => {
   t.plan(3)
 
-  let { bot, message } = t.context
-  let jobsChannel = process.env.CHANNEL_JOBS
-  let welcomeText = [
+  const { bot, message } = t.context
+  const jobsChannel = process.env.CHANNEL_JOBS
+  const welcomeText = [
     '¡Hola! Ya que acabas de llegar por aquí te cuento unas cositas sobre colombia.dev: \n' +
     '• Somos una comunidad de personas interesadas en programación y diseño ' +
     'nacidas o residentes en :flag-co: \n' +
@@ -96,27 +96,27 @@ test('it welcomes new user in private conversation', t => {
 test('it creates new user storage', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
   // call onboarding
   return onboard(bot, message).then(() => {
-    let savedID = storage.users.save.args[0][0].id
-    t.is(savedID, message.user.id, `new user storage is created`)
+    const savedID = storage.users.save.args[0][0].id
+    t.is(savedID, message.user.id, 'new user storage is created')
   })
 })
 
 test('it records date user joined', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
-  let now = Date.now()
-  let clock = sinon.useFakeTimers(now)
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
+  const now = Date.now()
+  const clock = sinon.useFakeTimers(now)
 
   // call onboarding
   return onboard(bot, message).then(() => {
-    let savedCreatedAt = storage.users.save.args[0][0].createdAt
+    const savedCreatedAt = storage.users.save.args[0][0].createdAt
     t.is(savedCreatedAt.getTime(), new Date().getTime(), 'records date user joined')
     clock.restore()
   })
@@ -125,8 +125,8 @@ test('it records date user joined', t => {
 test('it records user name', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
   // call onboarding
   return onboard(bot, message).then(() => {
@@ -137,8 +137,8 @@ test('it records user name', t => {
 test('it records user real name', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
   // call onboarding
   return onboard(bot, message).then(() => {
@@ -149,8 +149,8 @@ test('it records user real name', t => {
 test('it records user email', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
   // call onboarding
   return onboard(bot, message).then(() => {
@@ -161,8 +161,8 @@ test('it records user email', t => {
 test('it records slack user state', t => {
   t.plan(3)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
   // call onboarding
   return onboard(bot, message).then(() => {
@@ -175,8 +175,8 @@ test('it records slack user state', t => {
 test('it records empty guests', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
   // call onboarding
   return onboard(bot, message).then(() => {
@@ -187,8 +187,8 @@ test('it records empty guests', t => {
 test('it assigns 1 invite', t => {
   t.plan(1)
 
-  let { bot, message } = t.context
-  let { storage } = bot.botkit
+  const { bot, message } = t.context
+  const { storage } = bot.botkit
 
   // call onboarding
   return onboard(bot, message).then(() => {

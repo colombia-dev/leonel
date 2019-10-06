@@ -7,9 +7,9 @@ function Message (opts) {
 
   debug('init', opts)
 
-  let match = opts.match || '*.'
-  let user = opts.user || 'user123'
-  let text = opts.text || ''
+  const match = opts.match || '*.'
+  const user = opts.user || 'user123'
+  const text = opts.text || ''
 
   return {
     match,

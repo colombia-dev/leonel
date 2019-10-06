@@ -11,7 +11,7 @@ const debug = require('debug')('bot:db:seed')
 /**
  * Local Variables
  */
-const {MONGO_URI, SLACK_TOKEN: token} = require('process').env
+const { MONGO_URI, SLACK_TOKEN: token } = require('process').env
 if (!MONGO_URI) throw new Error('MONGO_URI is not set')
 if (!token) throw new Error('SLACK_TOKEN is required!')
 
@@ -29,8 +29,11 @@ const bot = controller.spawn({ token })
  */
 function updateMember (member) {
   const invites = 1
-  const {id, name, is_owner, is_admin, is_bot} = member
-  const {real_name_normalized: real_name, email} = member.profile
+  /* eslint-disable*/
+  // (this is the way the data is stored in mongo)
+  const { id, name, is_owner, is_admin, is_bot } = member
+  const { real_name_normalized: real_name, email } = member.profile
+  /* eslint-enable */
   const $set = {
     id,
     name,
@@ -41,11 +44,12 @@ function updateMember (member) {
     is_admin,
     is_bot
   }
-  const $setOnInsert = {guests: [], createdAt: new Date()}
+  const $setOnInsert = { guests: [], createdAt: new Date() }
 
   updates.push(
-    users.update({id}, {$set, $setOnInsert}, {upsert: true})
-    .then(() => debug(`updated ${member.name}`))
+    users
+      .update({ id }, { $set, $setOnInsert }, { upsert: true })
+      .then(() => debug(`updated ${member.name}`))
   )
 }
 
@@ -53,7 +57,9 @@ function updateMember (member) {
  * Make request to Slack API so we can get all users and then update them
  */
 bot.api.users.list({}, (err, res) => {
-  if (err) { throw err }
+  if (err) {
+    throw err
+  }
   debug(`found ${res.members.length} members`)
 
   res.members.forEach(updateMember)
