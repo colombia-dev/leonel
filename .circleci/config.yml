@@ -5,7 +5,6 @@ jobs:
     # The primary container is an instance of the first image listed. The job's commands run in this container.
     docker:
       - image: circleci/node:12.10.0
-    # The secondary container is an instance of the second listed image which is run in a common network where ports exposed on the primary container are available on localhost.
       - image: mongo:3.4.4
     steps:
       - checkout
@@ -21,12 +20,6 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  test:
-    docker:
-      - image: circleci/node:12.10.0
-      - image: mongo:3.4.4
-    steps:
-      - checkout
       - run:
           name: Test
           command: npm test
@@ -39,6 +32,3 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - test:
-          requires:
-            - build
