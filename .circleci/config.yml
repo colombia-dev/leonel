@@ -12,7 +12,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: Install npm weeeeee
+          name: Install npm weeeeee \o/
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
