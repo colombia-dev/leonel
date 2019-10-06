@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/leonel
+    environment:
+      MONGO_URI: mongodb://localhost:27017/leonel-test
+    docker:
+      - image: circleci/node:12.10.0
+      - image: mongo:3.4.4
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install npm weeeeee \o/
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: Test
+          command: npm test
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build

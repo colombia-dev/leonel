@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "standard && ava",
+    "test": "./node_modules/.bin/standard && ./node_modules/.bin/ava",
     "script:invites": "DEBUG=\"bot:*\" node scripts/give-invites",
     "db:seed": "DEBUG=\"bot:*\" node scripts/seed",
     "start:watch": "DEBUG=\"bot:*\" node_modules/.bin/nodemon -L index.js"
