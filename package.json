@@ -45,7 +45,6 @@
   "devDependencies": {
     "ava": "^2.4.0",
     "babel-preset-env": "^1.7.0",
-    "jscs": "^3.0.7",
     "nock": "^9.0.0",
     "nodemon": "^1.11.0",
     "sinon": "^2.1.0",
