@@ -24,3 +24,4 @@
     - [x] update files to match new standard
   - [ ] superagent          3.8.2    3.8.3    5.1.0
 - [ ] fix coin command
+- [ ] use native Promises
