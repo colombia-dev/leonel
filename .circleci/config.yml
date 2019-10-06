@@ -15,7 +15,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: Install npm wee
+          name: Install npm weeeeee
           command: npm install
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
@@ -33,9 +33,6 @@ jobs:
       - store_artifacts:
           path: test-results.xml
           prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
 
 workflows:
   version: 2
