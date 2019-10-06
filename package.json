@@ -43,7 +43,7 @@
     "superagent-bluebird-promise": "^4.1.0"
   },
   "devDependencies": {
-    "ava": "^0.19.0",
+    "ava": "^2.4.0",
     "babel-preset-env": "^1.1.8",
     "jscs": "^3.0.7",
     "nock": "^9.0.0",
