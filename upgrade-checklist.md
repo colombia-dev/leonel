@@ -5,8 +5,8 @@
 - [x] update circleci
 - [ ] update readme
 - [ ] dependencies
-  - [ ] ava                0.19.1   0.19.1    2.4.0
-  - [ ] babel-preset-env    1.6.1    1.7.0    1.7.0
+  - [x] ava                0.19.1   0.19.1    2.4.0
+  - [x] babel-preset-env    1.6.1    1.7.0    1.7.0
   - [ ] bluebird            3.5.1    3.7.0    3.7.0
   - [ ] botkit              0.5.4    0.5.4    4.5.0
   - [ ] debug               2.6.9    2.6.9    4.1.1
@@ -25,3 +25,4 @@
   - [ ] superagent          3.8.2    3.8.3    5.1.0
 - [ ] fix coin command
 - [ ] use native Promises
+- [ ] can we remove babel-preset-env?
