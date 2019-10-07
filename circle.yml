@@ -1,5 +1,0 @@
-machine:
-  environment:
-    MONGO_URI: "mongodb://localhost:27017/circle_test"
-  node:
-    version: 9.4.0

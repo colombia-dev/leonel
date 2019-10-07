@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "standard && ava",
+    "test": "./node_modules/.bin/standard && ./node_modules/.bin/ava",
     "script:invites": "DEBUG=\"bot:*\" node scripts/give-invites",
     "db:seed": "DEBUG=\"bot:*\" node scripts/seed",
     "start:watch": "DEBUG=\"bot:*\" node_modules/.bin/nodemon -L index.js"
@@ -52,7 +52,7 @@
     "standard": "^10.0.1"
   },
   "engines": {
-    "node": "9.4.x",
-    "npm": "5.6.x"
+    "node": "12.10.x",
+    "npm": "6.10.x"
   }
 }
