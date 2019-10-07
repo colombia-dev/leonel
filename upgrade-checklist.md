@@ -14,7 +14,7 @@
   - [ ] moment             2.20.1   2.24.0   2.24.0
   - [ ] mongodb            2.2.34   2.2.36    3.3.2
   - [ ] monk                6.0.5    6.0.6    7.1.0
-  - [ ] nock                9.1.6    9.6.1   11.3.6
+  - [x] nock                9.1.6    9.6.1   11.3.6
   - [ ] nodemon           1.14.12   1.19.3   1.19.3
   - [ ] proxyquire          1.8.0    1.8.0    2.1.3
   - [ ] request            2.83.0   2.88.0   2.88.0
@@ -26,3 +26,4 @@
 - [ ] fix coin command
 - [ ] use native Promises
 - [ ] can we remove babel-preset-env?
+- [ ] can we get nock tests to be parallel?
