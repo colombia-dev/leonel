@@ -8,7 +8,7 @@ function Storage (opts) {
 
   debug('init', opts)
 
-  let storage = {
+  const storage = {
     users: {
       get: sinon.stub().yields(),
       save: sinon.stub().yields()

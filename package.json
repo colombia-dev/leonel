@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "./node_modules/.bin/standard && ./node_modules/.bin/ava",
+    "test": "standard && ava",
     "script:invites": "DEBUG=\"bot:*\" node scripts/give-invites",
     "db:seed": "DEBUG=\"bot:*\" node scripts/seed",
     "start:watch": "DEBUG=\"bot:*\" node_modules/.bin/nodemon -L index.js"
@@ -33,7 +33,7 @@
     "botkit-storage-mongo": "^1.0.4",
     "debug": "^2.6.3",
     "lodash": "^4.16.4",
-    "moment": "^2.13.0",
+    "moment": "^2.24.0",
     "mongodb": "^2.2.18",
     "monk": "^6.0.5",
     "proxyquire": "^1.7.11",
@@ -43,13 +43,12 @@
     "superagent-bluebird-promise": "^4.1.0"
   },
   "devDependencies": {
-    "ava": "^0.19.0",
-    "babel-preset-env": "^1.1.8",
-    "jscs": "^3.0.7",
-    "nock": "^9.0.0",
-    "nodemon": "^1.11.0",
-    "sinon": "^2.1.0",
-    "standard": "^10.0.1"
+    "ava": "^2.4.0",
+    "babel-preset-env": "^1.7.0",
+    "nock": "^11.3.6",
+    "nodemon": "^1.19.3",
+    "sinon": "^7.5.0",
+    "standard": "^14.3.1"
   },
   "engines": {
     "node": "12.10.x",

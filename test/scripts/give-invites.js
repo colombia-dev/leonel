@@ -33,8 +33,8 @@ test.beforeEach(t => {
 })
 
 test.afterEach(t => {
-  const {users, user} = t.context
-  return users.remove({_id: user._id})
+  const { users, user } = t.context
+  return users.remove({ _id: user._id })
 })
 
 /**
@@ -46,8 +46,8 @@ test('it exists', t => {
 })
 
 test('it gives all users one invite', t => {
-  const {users, user} = t.context
+  const { users, user } = t.context
   return script()
-    .then(() => users.findOne({_id: user._id}))
+    .then(() => users.findOne({ _id: user._id }))
     .then(user => t.is(user.invites, 1, 'user has one invite'))
 })

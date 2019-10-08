@@ -15,17 +15,17 @@ const debug = require('debug')('bot:main')
 const packageInfo = require('./package.json')
 
 // Expect a SLACK_TOKEN environment variable
-let slackToken = config.SLACK_TOKEN
+const slackToken = config.SLACK_TOKEN
 if (!slackToken) {
   console.error('SLACK_TOKEN is required!')
   process.exit(1)
 }
 
-let controller = Botkit.slackbot({
+const controller = Botkit.slackbot({
   storage: storage
 })
 
-let bot = controller.spawn({
+const bot = controller.spawn({
   retry: 10,
   token: slackToken
 })
