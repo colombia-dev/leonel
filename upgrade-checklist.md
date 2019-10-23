@@ -3,6 +3,7 @@
 - [x] update node
 - [x] update npm
 - [x] update circleci
+- [x] update DokerFile to node:12.10
 - [ ] update readme
 - [ ] dependencies
   - [x] ava                0.19.1   0.19.1    2.4.0
