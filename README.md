@@ -42,7 +42,7 @@ The docker-compose setup is configured to reboot the bot when any local file cha
 Leonel uses MongoDB to store specific information about users, you can create the user accounts by running:
 
 ```bash
-$ docker-compose run bot yarn db:seed
+$ docker-compose run bot npm run db:seed
 ```
 
 This will execute the script [db:seed][db-seed] in a container to create all the users from Slack's API.
@@ -52,19 +52,19 @@ This will execute the script [db:seed][db-seed] in a container to create all the
 You can run `ava` tests in a container, by running:
 
 ```bash
-$ docker-compose run bot yarn test
+$ docker-compose run bot npm test
 ```
 
 If you want for tests to watch your files, you can run:
 
 ```bash
-$ docker-compose run bot yarn test -- -w
+$ docker-compose run bot npm test -- -w
 ```
 
 If you want to modify the `DEBUG` env var, you can run:
 
 ```bash
-$ docker-compose run -e DEBUG="" bot yarn test -- -w
+$ docker-compose run -e DEBUG="" bot npm test -- -w
 ```
 
 #### Shutting Down
@@ -82,20 +82,20 @@ $ docker-compose down
 All environment variables in [example env file][env] should be set before running Leonel.
 
 Other requirements:
-- Yarn
-- NodeJS 7.7.x
+- Npm
+- NodeJS 12.10.x
 - MongoDB
 
 Install dependencies:
 
 ```bash
-$ yarn
+$ npm install
 ```
 
 Start leonel:
 
 ```bash
-$ yarn start
+$ npm start
 ```
 
 Things are looking good if the console prints something like:
@@ -107,14 +107,14 @@ Things are looking good if the console prints something like:
 bot:main Estamos coneptados al Eslá
 ```
 
-We have added `yarn start:watch` script which uses Nodemon for convenience during development. This restarts the bot after any change done to source files.
+We have added `npm run start:watch` script which uses Nodemon for convenience during development. This restarts the bot after any change done to source files.
 
 #### Seed users
 
 Leonel uses MongoDB to store specific information about users, you can create the user accounts by running:
 
 ```bash
-$ yarn db:seed
+$ npm run db:seed
 ```
 
 This will execute the script [db:seed][db-seed] to create all the users from Slack's API.
@@ -125,13 +125,13 @@ This will execute the script [db:seed][db-seed] to create all the users from Sla
 We use ava for unit and integration testing, you can run tests by typing:
 
 ```bash
-$ yarn test
+$ npm test
 ```
 
 You can watch files and run tests when any changes are detected by using:
 
 ```bash
-$ yarn test -- -w
+$ npm test -- -w
 ```
 
 ### JavaScript Style
@@ -141,7 +141,7 @@ In order to minimize code style differences, we have adopted the [StandardJS][st
 **note: you can check compatibility by running tests**
 
 ```bash
-$ yarn test
+$ npm test
 ```
 
 **note: you may also be able to automatically fix any style issues with the `standard` tool**
