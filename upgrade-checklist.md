@@ -24,7 +24,7 @@
   - [x] standard           10.0.3   10.0.3   14.3.1
     - [x] update files to match new standard
   - [ ] superagent          3.8.2    3.8.3    5.1.0
-- [ ] fix coin command
+- [x] fix coin command
 - [ ] use native Promises
 - [ ] can we remove babel-preset-env?
 - [ ] can we get nock tests to be parallel?
