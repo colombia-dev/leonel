@@ -8,22 +8,22 @@
 - [ ] dependencies
   - [x] ava                0.19.1   0.19.1    2.4.0
   - [x] babel-preset-env    1.6.1    1.7.0    1.7.0
-  - [ ] bluebird            3.5.1    3.7.0    3.7.0
+  - [x] bluebird            3.5.1    3.7.0    3.7.1
   - [ ] botkit              0.5.4    0.5.4    4.5.0
-  - [ ] debug               2.6.9    2.6.9    4.1.1
-  - [ ] lodash             4.17.4  4.17.15  4.17.15
+  - [x] debug               2.6.9    2.6.9    4.1.1
+  - [x] lodash             4.17.4  4.17.15  4.17.15
   - [x] moment             2.20.1   2.24.0   2.24.0
-  - [ ] mongodb            2.2.34   2.2.36    3.3.2
-  - [ ] monk                6.0.5    6.0.6    7.1.0
-  - [x] nock                9.1.6    9.6.1   11.3.6
-  - [x] nodemon           1.14.12   1.19.3   1.19.3
-  - [ ] proxyquire          1.8.0    1.8.0    2.1.3
-  - [ ] request            2.83.0   2.88.0   2.88.0
-  - [ ] request-promise     4.2.2    4.2.4    4.2.4
+  - [x] mongodb            2.2.34   2.2.36    3.3.3
+  - [x] monk                6.0.5    6.0.6    7.1.1
+  - [x] nock                9.1.6    9.6.1   11.6.0
+  - [x] nodemon           1.14.12   1.19.3   1.19.4
+  - [x] proxyquire          1.8.0    1.8.0    2.1.3
+  - [x] request            2.83.0   2.88.0   2.88.0
+  - [x] request-promise     4.2.2    4.2.4    4.2.4
   - [x] sinon               2.4.1    2.4.1    7.5.0
   - [x] standard           10.0.3   10.0.3   14.3.1
-    - [x] update files to match new standard
-  - [ ] superagent          3.8.2    3.8.3    5.1.0
+  - [x] superagent          3.8.2    3.8.3    5.1.0
+- [x] update files to match new standard
 - [x] fix coin command
 - [ ] use native Promises
 - [ ] can we remove babel-preset-env?
