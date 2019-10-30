@@ -53,5 +53,10 @@
   "engines": {
     "node": "12.10.x",
     "npm": "6.10.x"
+  },
+  "ava": {
+    "helpers": [
+      "**/helpers/*"
+    ]
   }
 }
