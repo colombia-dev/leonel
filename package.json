@@ -32,7 +32,7 @@
     "botkit": "0.5.4",
     "botkit-storage-mongo": "^1.0.4",
     "debug": "^2.6.3",
-    "lodash": "^4.16.4",
+    "lodash": "^4.17.19",
     "moment": "^2.13.0",
     "mongodb": "^2.2.18",
     "monk": "^6.0.5",
