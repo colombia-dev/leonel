@@ -8,8 +8,6 @@ const Botkit = require('botkit')
 const invite = require('./lib/invite')
 const onboard = require('./lib/onboard')
 const guests = require('./lib/guests')
-const coinPrice = require('./lib/coinPrice')
-const coinMiddleware = require('./middlewares/coinMiddleware')
 const storage = require('botkit-storage-mongo')({ mongoUri: config.MONGO_URI })
 const debug = require('debug')('bot:main')
 const packageInfo = require('./package.json')
@@ -107,11 +105,6 @@ controller.hears('test', ['direct_mention', 'direct_message'], (bot, message) =>
   debug('message', JSON.stringify(message, null, 2))
   bot.reply(message, '¡Listo papito! Si, es ya es ¡Ya!')
 })
-
-/**
- * Crypto Currency price
- */
-controller.hears('*', ['direct_metion', 'direct_message'], coinMiddleware, coinPrice)
 
 /**
  * Uncaught Messages
