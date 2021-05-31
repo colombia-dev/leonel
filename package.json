@@ -29,8 +29,8 @@
   "homepage": "https://github.com/colombia-dev/leonel#readme",
   "dependencies": {
     "bluebird": "^3.3.5",
-    "botkit": "0.5.4",
-    "botkit-storage-mongo": "^1.0.4",
+    "botkit": "^0.7.5",
+    "botkit-storage-mongo": "^1.0.7",
     "debug": "^2.6.3",
     "lodash": "^4.16.4",
     "moment": "^2.13.0",
